@@ -7,15 +7,16 @@ describe("LOR", function () {
 
     async function deployLORFixture() {
 
-        const [owner, approver, student] = await hre.ethers.getSigners()
+        const [owner, student] = await hre.ethers.getSigners()
         const lorContractFactory = await hre.ethers.getContractFactory("LOR")
         const LOR = await lorContractFactory.deploy()
         await LOR.waitForDeployment()
 
         console.log(`LOR deployed to ${LOR.target}`)
         console.log(`Owner: ${owner.address}`)
-        console.log(`Approver: ${approver.address}`)
-        return { LOR, owner, approver, student }
+        console.log(`Approver: ${owner.address}`)
+        console.log(`Student: ${student.address}`)
+        return { LOR, owner, student }
     }
 
 
@@ -50,5 +51,23 @@ describe("LOR", function () {
         //     console.log(lorEvent.args.studentAddress)
         // }
 
+    })
+
+    it("Approver approves LOR", async function () {
+        const { LOR, owner, student } = await loadFixture(deployLORFixture)
+
+        const requestId = 1001
+        const name = "Mandar Deshpande"
+        const program = "Blockchain Development"
+        const university = "XYZ University"
+        const studentAddress = student.address
+
+        const tx = await LOR.connect(student).createLORRequest(requestId, studentAddress, name, program, university)
+
+        await tx.wait()
+
+        const approve = await LOR.approveLORRequest(requestId)
+
+        await expect(approve).to.emit(LOR, "LORApproved").withArgs(requestId, owner, studentAddress)
     })
 })
