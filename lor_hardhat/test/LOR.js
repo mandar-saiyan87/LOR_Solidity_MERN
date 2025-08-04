@@ -1,0 +1,54 @@
+const hre = require("hardhat")
+const { expect } = require("chai")
+const { loadFixture } = require("@nomicfoundation/hardhat-toolbox/network-helpers")
+
+
+describe("LOR", function () {
+
+    async function deployLORFixture() {
+
+        const [owner, approver, student] = await hre.ethers.getSigners()
+        const lorContractFactory = await hre.ethers.getContractFactory("LOR")
+        const LOR = await lorContractFactory.deploy()
+        await LOR.waitForDeployment()
+
+        console.log(`LOR deployed to ${LOR.target}`)
+        console.log(`Owner: ${owner.address}`)
+        console.log(`Approver: ${approver.address}`)
+        return { LOR, owner, approver, student }
+    }
+
+
+    it("Student request LOR", async function () {
+        const { LOR, student } = await loadFixture(deployLORFixture)
+
+        const requestId = 1001
+        const name = "Mandar Deshpande"
+        const program = "Blockchain Development"
+        const university = "XYZ University"
+        const studentAddress = student.address
+
+        const tx = await LOR.connect(student).createLORRequest(requestId, studentAddress, name, program, university)
+
+        // Check for LORRequested event emitted
+
+
+        // const receipt = await tx.wait()
+        // await expect(tx).to.emit(contract, "Requestname").withArgs(args emitted by event seperated with comma)
+        await expect(tx).to.emit(LOR, "LORRequested").withArgs(requestId, studentAddress)
+
+        // const iface = LOR.interface
+        // const lorEvent = receipt.logs.map(logs => {
+        //     try {
+        //         return iface.parseLog(logs)
+        //     } catch (error) {
+        //         return null
+        //     }
+        // }).find(log => log?.name === "LORRequested")
+        // if (lorEvent) {
+        //     console.log(lorEvent.args.requestId)
+        //     console.log(lorEvent.args.studentAddress)
+        // }
+
+    })
+})
