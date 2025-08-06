@@ -14,7 +14,7 @@ describe("LOR", function () {
 
         console.log(`LOR deployed to ${LOR.target}`)
         console.log(`Owner: ${owner.address}`)
-        console.log(`Approver: ${owner.address}`)
+        console.log(`Approver: ${approver.address}`)
         console.log(`Student: ${student.address}`)
         return { LOR, owner, student, approver }
     }
@@ -52,6 +52,29 @@ describe("LOR", function () {
         // }
 
     })
+    it("Should return LOR", async function () {
+        const { LOR, student } = await loadFixture(deployLORFixture)
+
+
+        const requestId = 1001
+        const name = "Mandar Deshpande"
+        const program = "Blockchain Development"
+        const university = "XYZ University"
+        const studentAddress = student.address
+
+        const tx = await LOR.connect(student).createLORRequest(requestId, studentAddress, name, program, university)
+
+        await tx.wait()
+
+        const LORrequest = await LOR.getLORRequest(requestId)
+        expect(LORrequest.requestId).to.equal(requestId)
+        expect(LORrequest.requester).to.equal(studentAddress)
+        expect(LORrequest.name).to.equal(name)
+        expect(LORrequest.program).to.equal(program)
+        expect(LORrequest.university).to.equal(university)
+        expect(LORrequest.isApproved).to.equal(false)
+        expect(LORrequest.approver).to.equal(hre.ethers.ZeroAddress)
+    })
 
     it("Approver approves LOR", async function () {
         const { LOR, owner, student } = await loadFixture(deployLORFixture)
@@ -69,6 +92,10 @@ describe("LOR", function () {
         const approve = await LOR.approveLORRequest(requestId)
 
         await expect(approve).to.emit(LOR, "LORApproved").withArgs(requestId, owner, studentAddress)
+
+        const LORrequest = await LOR.getLORRequest(requestId)
+        expect(LORrequest.isApproved).to.equal(true)
+        expect(LORrequest.approver).to.equal(owner.address)
     })
     it("Only owner can change approver", async function () {
         const { LOR, owner, approver, student } = await loadFixture(deployLORFixture)
@@ -87,8 +114,12 @@ describe("LOR", function () {
 
         await tx.wait()
 
-        const approve = await LOR.connect(approver).approveLORRequest(requestId)
-        await expect(approve).to.emit(LOR, "LORApproved").withArgs(requestId, approver.address, studentAddress)
+        const approved = await LOR.connect(approver).approveLORRequest(requestId)
+        await expect(approved).to.emit(LOR, "LORApproved").withArgs(requestId, approver.address, studentAddress)
+
+        const LORrequest = await LOR.getLORRequest(requestId)
+        expect(LORrequest.isApproved).to.equal(true)
+        expect(LORrequest.approver).to.equal(approver.address)
 
     })
 
