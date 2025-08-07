@@ -84,6 +84,10 @@ contract LOR {
             lorRequests[_requestId].isApproved == false,
             "Already approved"
         );
+        require(
+            lorRequests[_requestId].isRejected == false,
+            "Request Rejected"
+        );
         lorRequests[_requestId].isApproved = true;
         lorRequests[_requestId].approver = msg.sender;
         emit LORApproved(
