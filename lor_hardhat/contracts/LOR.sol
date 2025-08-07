@@ -18,18 +18,24 @@ contract LOR {
         string university;
         address studentAddress;
         bool isApproved;
+        bool isRejected;
         address approver;
     }
 
     mapping(uint256 => LORRequest) public lorRequests;
 
-    event LORRequested(uint256 requestId, address indexed student);
+    event LORRequested(uint256 indexed requestId, address indexed student);
     event LORApproved(
-        uint256 requestId,
+        uint256 indexed requestId,
         address indexed approver,
         address indexed student
     );
-    event StudentRequest(uint256 requestId, address indexed student);
+    event StudentRequest(uint256 indexed requestId, address indexed student);
+    event LORRejected(
+        uint256 indexed requestId,
+        address indexed approver,
+        address indexed student
+    );
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Only owner can perform this action");
@@ -66,6 +72,7 @@ contract LOR {
             university: _university,
             studentAddress: _studentAddress,
             isApproved: false,
+            isRejected: false,
             approver: address(0)
         });
         emit LORRequested(_requestId, _studentAddress);
@@ -80,6 +87,25 @@ contract LOR {
         lorRequests[_requestId].isApproved = true;
         lorRequests[_requestId].approver = msg.sender;
         emit LORApproved(
+            _requestId,
+            msg.sender,
+            lorRequests[_requestId].studentAddress
+        );
+    }
+
+    function rejectLORRequest(uint256 _requestId) external onlyApprover {
+        require(
+            lorRequests[_requestId].isApproved == false,
+            "Already approved"
+        );
+        require(
+            lorRequests[_requestId].isRejected == false,
+            "Request Rejected"
+        );
+
+        lorRequests[_requestId].isRejected = true;
+        lorRequests[_requestId].approver = msg.sender;
+        emit LORRejected(
             _requestId,
             msg.sender,
             lorRequests[_requestId].studentAddress

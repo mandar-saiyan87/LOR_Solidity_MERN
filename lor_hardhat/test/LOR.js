@@ -97,6 +97,29 @@ describe("LOR", function () {
         expect(LORrequest.isApproved).to.equal(true)
         expect(LORrequest.approver).to.equal(owner.address)
     })
+    it("Approver rejects LOR", async function () {
+
+        const { LOR, owner, student } = await loadFixture(deployLORFixture)
+
+        const requestId = 1001
+        const name = "Mandar Deshpande"
+        const program = "Blockchain Development"
+        const university = "XYZ University"
+        const studentAddress = student.address
+
+        const tx = await LOR.connect(student).createLORRequest(requestId, studentAddress, name, program, university)
+
+        await tx.wait()
+
+        const reject = await LOR.rejectLORRequest(requestId)
+
+        await expect(reject).to.emit(LOR, "LORRejected").withArgs(requestId, owner, studentAddress)
+
+        const LORrequest = await LOR.getLORRequest(requestId)
+        expect(LORrequest.isApproved).to.equal(false)
+        expect(LORrequest.isRejected).to.equal(true)
+        expect(LORrequest.approver).to.equal(owner.address)
+    })
     it("Only owner can change approver", async function () {
         const { LOR, owner, approver, student } = await loadFixture(deployLORFixture)
         await LOR.updateApprover(approver.address)
