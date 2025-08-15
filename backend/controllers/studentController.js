@@ -10,26 +10,26 @@ export async function registerStudent(req, res) {
         if (email) {
             const emailexists = await Student.findOne({ email })
             if (emailexists) {
-                res.status(400).json({ message: "Email already exists" })
+                return res.status(400).json({ message: "Email already exists" })
             }
         }
 
         // Check for wallet address present in body
         if (!walletaddress) {
-            res.status(400).json({ message: "Wallet address is required" })
+            return res.status(400).json({ message: "Wallet address is required" })
         }
 
         // Check if address is valid
         const validwalletaddress = isvalidWalletAddress(walletaddress)
 
         if (!validwalletaddress) {
-            res.status(400).json({ message: "Invalid wallet address" })
+            return res.status(400).json({ message: "Invalid wallet address" })
         }
 
         // Check for wallet address already exist
         const walletExist = await Student.findOne({ walletaddress })
         if (walletExist) {
-            res.status(400).json({ message: "Wallet address already exists" })
+            return res.status(400).json({ message: "Wallet address already exists" })
         }
 
 
@@ -43,21 +43,22 @@ export async function registerStudent(req, res) {
             const token = generateToken(student)
 
 
-            res.status(201).json({ message: "Student registered successfully", student, token })
+            return res.status(201).json({ message: "Student registered successfully", student, token })
         }
-        
-            // If authType is wallet, create user without password nad generate token
-        
+
+        // If authType is wallet, create user without password nad generate token
+
         else {
             const student = await Student.create({ name, email, walletaddress, program, role, authType }).select('-password')
 
             const token = generateToken(student)
 
-            res.status(201).json({ message: "Student registered successfully", student, token })
+            return res.status(201).json({ message: "Student registered successfully", student, token })
         }
     } catch (error) {
-        res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
+        return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
 
     }
 
 }
+
