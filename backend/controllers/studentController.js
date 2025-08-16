@@ -56,6 +56,10 @@ export async function registerStudent(req, res) {
             return res.status(201).json({ message: "Student registered successfully", student, token })
         }
     } catch (error) {
+        if (error.name === "ValidationError") {
+            const messages = Object.values(error.errors).map(err => err.message);
+            return res.status(400).json({ errors: messages });
+        }
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
 
     }
