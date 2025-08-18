@@ -1,7 +1,7 @@
 import Approver from "../models/Users/Approver.js"
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/JWTHelper.js"
-import { isvalidWalletAddress } from "../utils/verifyPublicAddress"
+import { isvalidWalletAddress } from "../utils/verifyPublicAddress.js"
 
 export async function createapprover(req, res) {
 
@@ -44,9 +44,7 @@ export async function createapprover(req, res) {
             department
         })
 
-        const token = generateToken(newApprover)
-
-        return res.status(200).json({ message: "Approver created successfully", newApprover, token })
+        return res.status(200).json({ message: "Approver created successfully", newApprover })
 
     } catch (error) {
         if (error.name === "ValidationError") {

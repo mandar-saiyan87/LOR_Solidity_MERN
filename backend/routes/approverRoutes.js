@@ -1,7 +1,7 @@
 import express from "express";
-import { createapprover } from "../controllers/approverController";
-import { verifyToken } from "../middleware/verifyToken";
-import { checkAdmin } from "../middleware/roleAuth";
+import { createapprover } from "../controllers/approverController.js";
+import { verifyToken } from "../middleware/verifyToken.js";
+import { checkAdmin } from "../middleware/roleAuth.js";
 
 
 const approverrouter = express.Router();
