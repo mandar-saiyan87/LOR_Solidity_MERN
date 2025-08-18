@@ -1,9 +1,9 @@
 import Student from "../models/Users/Student.js"
 import bcrypt from "bcrypt"
 import { isvalidWalletAddress } from "../utils/verifyPublicAddress.js"
-import { generateToken } from "../utils/generateJWT.js"
+import { generateToken } from "../utils/JWTHelper.js"
 export async function registerStudent(req, res) {
-    const { name, email, password, walletaddress, program, role, authType } = req.body
+    const { name, email, password, walletaddress, role, authType } = req.body
 
     try {
         // Check for email already exist
@@ -38,7 +38,7 @@ export async function registerStudent(req, res) {
 
             const passwordHash = await bcrypt.hash(password, 10)
 
-            const student = await Student.create({ name, email, password: passwordHash, walletaddress: [walletaddress], program, role, authType })
+            const student = await Student.create({ name, email, password: passwordHash, walletaddress: [walletaddress], role, authType })
 
             const token = generateToken(student)
 
@@ -49,7 +49,7 @@ export async function registerStudent(req, res) {
         // If authType is wallet, create user without password nad generate token
 
         else {
-            const student = await Student.create({ name, email, walletaddress, program, role, authType }).select('-password')
+            const student = await Student.create({ name, email, walletaddress, role, authType }).select('-password')
 
             const token = generateToken(student)
 

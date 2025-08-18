@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const approverSchema = new mongoose.schema({
+const approverSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true
@@ -18,7 +18,7 @@ const approverSchema = new mongoose.schema({
         require: true,
         unique: true
     },
-    designaation: {
+    designation: {
         type: String
     },
     department: {
@@ -29,3 +29,6 @@ const approverSchema = new mongoose.schema({
         default: "Approver"
     }
 })
+
+const Approver = mongoose.model("Approver", approverSchema)
+export default Approver

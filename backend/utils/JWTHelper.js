@@ -17,3 +17,4 @@ export function generateToken(user) {
     )
     return token
 }
+

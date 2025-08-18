@@ -2,6 +2,7 @@ import express from "express"
 import cors from "cors"
 import connectDB from "./config/db.js"
 import studentrouter from "./routes/studentRoutes.js"
+import loginrouter from "./routes/loginRoutes.js"
 
 
 
@@ -14,6 +15,7 @@ app.use(express.json())
 
 
 app.use("/students", studentrouter)
+app.use("/login", loginrouter)
 
 
 

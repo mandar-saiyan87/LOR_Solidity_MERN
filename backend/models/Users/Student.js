@@ -33,7 +33,6 @@ const studentSchema = new mongoose.Schema({
             }
         ]
     },
-    program: { type: String },
     role: {
         type: String,
         default: "Student"
