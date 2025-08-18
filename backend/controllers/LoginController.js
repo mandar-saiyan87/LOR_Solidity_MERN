@@ -62,3 +62,31 @@ export async function AdminLogin(req, res) {
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
     }
 }
+
+export async function ApproverLogin(req, res) {
+
+    const { email, password } = req.body
+
+    try {
+        const approver = await Approver.findOne({ email }).select('+password')
+
+        if (!approver) {
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, approver.password)
+
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid password" })
+        }
+
+        const { password: approverPassword, ...approverdetails } = approver.toObject();
+
+        const token = generateToken(approverdetails)
+
+        return res.status(200).json({ message: "Login successful", approverdetails, token })
+    } catch (error) {
+        return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
+    }
+
+}
