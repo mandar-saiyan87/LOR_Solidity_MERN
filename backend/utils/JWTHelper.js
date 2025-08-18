@@ -8,7 +8,7 @@ export function generateToken(user) {
             _id: user._id,
             name: user.name,
             email: user.email,
-            walletaddress: user.walletaddress,
+            role: user.role
         },
         process.env.JWT_SECRET,
         {

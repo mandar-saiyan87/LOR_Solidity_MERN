@@ -33,3 +33,32 @@ export async function StudentLogin(req, res) {
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
     }
 }
+
+export async function AdminLogin(req, res) {
+
+    const { email, password } = req.body
+
+    try {
+        const admin = await Admin.findOne({ email }).select('+password')
+
+        if (!admin) {
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        const isPasswordValid = await bcrypt.compare(password, admin.password)
+
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid password" })
+        }
+
+        const { password: adminPassword, ...admindetails } = admin.toObject();
+
+        const token = generateToken(admindetails)
+
+        return res.status(200).json({ message: "Login successful", admindetails, token })
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
+    }
+}
