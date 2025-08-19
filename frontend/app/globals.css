@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+body {
+  @apply flex flex-col w-screen min-h-screen items-center justify-center m-0 p-0 antialiased overflow-x-hidden;
+}
