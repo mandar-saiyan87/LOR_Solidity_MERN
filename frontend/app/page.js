@@ -1,8 +1,10 @@
+import React from "react";
+import LoginPage from "./auth/login/page";
 
 export default function Home() {
   return (
     <>
-      <h2>LOR System Homepage</h2>
+      <LoginPage />
     </>
 
   );
