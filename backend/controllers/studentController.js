@@ -42,8 +42,15 @@ export async function registerStudent(req, res) {
 
             const token = generateToken(student)
 
+            res.cookie('auth_token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000
+            })
 
-            return res.status(201).json({ message: "Student registered successfully", student, token })
+
+            return res.status(201).json({ message: "Student registered successfully", student })
         }
 
         // If authType is wallet, create user without password nad generate token

@@ -1,3 +1,6 @@
+
+// Logout function is also included in same file at the bottom
+
 import Student from "../models/Users/Student.js"
 import Admin from "../models/Users/Admin.js"
 import Approver from "../models/Users/Approver.js"
@@ -26,8 +29,15 @@ export async function StudentLogin(req, res) {
 
         const token = generateToken(studentdetails)
 
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        })
 
-        return res.status(200).json({ message: "Login successful", studentdetails, token })
+        return res.status(200).json({ message: "Login successful", studentdetails })
+
     } catch (error) {
         console.log(error)
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
@@ -55,7 +65,15 @@ export async function AdminLogin(req, res) {
 
         const token = generateToken(admindetails)
 
-        return res.status(200).json({ message: "Login successful", admindetails, token })
+
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        return res.status(200).json({ message: "Login successful", admindetails })
 
     } catch (error) {
         console.log(error)
@@ -84,7 +102,15 @@ export async function ApproverLogin(req, res) {
 
         const token = generateToken(approverdetails)
 
-        return res.status(200).json({ message: "Login successful", approverdetails, token })
+        res.cookie('auth_token', token, {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'strict',
+            maxAge: 24 * 60 * 60 * 1000
+        })
+
+        return res.status(200).json({ message: "Login successful", approverdetails })
+
     } catch (error) {
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
     }

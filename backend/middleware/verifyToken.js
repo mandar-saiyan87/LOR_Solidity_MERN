@@ -5,13 +5,16 @@ dotenv.config()
 
 export function verifyToken(req, res, next) {
 
-    const authToken = req.headers['authorization']
+    // If token sent from client frontend (authorization header bearer)
+    // const authToken = req.headers['authorization']
 
-    if (!authToken) {
-        return res.status(401).json({ message: "Access denied" })
-    }
+    // if (!authToken) {
+    //     return res.status(401).json({ message: "Access denied" })
+    // }
 
-    const token = authToken.split(" ")[1]
+    // const token = authToken.split(" ")[1]
+
+    const token = req.cookies.auth_token
 
     if (!token) {
         return res.status(401).json({ message: "Access denied" })
