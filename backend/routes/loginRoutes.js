@@ -1,7 +1,7 @@
+// Logout route included
 import express from "express";
-import { StudentLogin } from "../controllers/LoginController.js";
-import { AdminLogin } from "../controllers/LoginController.js";
-import { ApproverLogin } from "../controllers/LoginController.js";
+import { StudentLogin, ApproverLogin, AdminLogin, GetUser } from "../controllers/LoginController.js";
+import verifyToken from "../middleware/verifyToken.js";
 
 const loginrouter = express.Router();
 
@@ -12,5 +12,7 @@ loginrouter.get("/status", (req, res) => {
 loginrouter.post("/students", StudentLogin)
 loginrouter.post("/admin", AdminLogin)
 loginrouter.post("/approver", ApproverLogin)
+loginrouter.get("/profile", verifyToken, GetUser)
+
 
 export default loginrouter;

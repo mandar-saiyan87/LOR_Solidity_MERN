@@ -112,7 +112,46 @@ export async function ApproverLogin(req, res) {
         return res.status(200).json({ message: "Login successful", approverdetails })
 
     } catch (error) {
+        console.log(error)
         return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
     }
+
+}
+
+export function Logout(req, res) {
+    res.clearCookie('auth_token')
+    return res.status(200).json({ message: "Logout successful" })
+}
+
+export async function GetUser(req, res) {
+    const { user } = req
+
+    try {
+
+        if (!user) {
+            return res.status(400).json({ message: "User not found" })
+        }
+
+        switch (user.role) {
+            case "Admin":
+                const admin = await Admin.findOne({ email: user.email }).select('-password')
+                const { password: adminPassword, ...admindetails } = admin.toObject();
+                return res.status(200).json({ message: "User found", user: admindetails })
+            case ("Approver"):
+                const approver = await Approver.findOne({ email: user.email }).select('-password')
+                const { password: approverPassword, ...approverdetails } = approver.toObject();
+                return res.status(200).json({ message: "User found", user: approverdetails })
+            default:
+                const student = await Student.findOne({ email: user.email }).select('-password')
+                const { password: studentPassword, ...studentdetails } = student.toObject();
+                return res.status(200).json({ message: "User found", user: studentdetails })
+        }
+
+    } catch (error) {
+        console.log(error)
+        return res.status(500).json({ message: "Server error, Something went wrong!", error: error.message })
+    }
+
+
 
 }
