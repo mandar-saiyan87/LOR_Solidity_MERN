@@ -37,9 +37,9 @@ export async function LoginController(req, res) {
             return res.status(400).json({ message: "Invalid password" })
         }
 
-        const { password: studentPassword, ...studentdetails } = user.toObject();
+        const { password: userPassword, ...userdetails } = user.toObject();
 
-        const token = generateToken(studentdetails)
+        const token = generateToken(userdetails)
 
         res.cookie('auth_token', token, {
             httpOnly: true,
@@ -48,7 +48,7 @@ export async function LoginController(req, res) {
             maxAge: 24 * 60 * 60 * 1000
         })
 
-        return res.status(200).json({ message: "Login successful", studentdetails })
+        return res.status(200).json({ message: "Login successful", userdetails })
 
 
     } catch (error) {

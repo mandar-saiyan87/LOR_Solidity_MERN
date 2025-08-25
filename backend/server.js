@@ -19,9 +19,9 @@ app.use(express.json())
 app.use(cookieParser())
 
 
-app.use("/students", studentrouter)
-app.use("/auth", authrouter)
-app.use("/approver", approverrouter)
+app.use("/api/students", studentrouter)
+app.use("/api/auth", authrouter)
+app.use("/api/approver", approverrouter)
 
 
 
