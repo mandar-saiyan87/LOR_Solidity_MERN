@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { userStore } from '@/store/UserStore'
 import { useRouter } from 'next/navigation'
@@ -16,9 +16,13 @@ function LoginPage() {
 
     const router = useRouter()
 
-    if (user && !loading) {
-        router.push(`/dashboard/${user.name}`)
-    }
+
+    useEffect(() => {
+        
+        if (user && !loading) {
+            router.push(`/dashboard/${user.name}`)
+        }
+    }, [user, router])
 
     function handleLogin(e) {
         e.preventDefault()
@@ -28,6 +32,7 @@ function LoginPage() {
     return (
         <>
             <div className="w-full flex flex-col items-center justify-center sm:h-screen p-4">
+
                 <div className="w-full max-w-lg mx-auto border border-gray-300 rounded-2xl p-8">
                     <div className="text-center mb-12">
                         <p className='text-xl text-blue-600 font-semibold'>LOR Portal</p>

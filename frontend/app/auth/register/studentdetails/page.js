@@ -1,11 +1,35 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, use, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { userStore } from '@/store/UserStore'
 
 function Studentdetails() {
 
     const router = useRouter()
+
+    const { registrationForm, user, loading } = userStore()
+
+    const [name, setName] = useState('')
+    const [walletaddress, setWalletaddress] = useState('')
+    const [program, setProgram] = useState('')
+
+    function handleRegistrationData() {
+        if (name && walletaddress && program) {
+            registrationForm({ name, walletaddress, program })
+        }
+    }
+
+    useEffect(() => {
+        handleRegistrationData()
+    }, [name, walletaddress, program])
+    
+
+    useEffect(() => {
+        if (user && !loading) {
+            router.push(`/dashboard/${user.name}`)
+        }
+    }, [user, loading , router]) 
+
 
     return (
         <>

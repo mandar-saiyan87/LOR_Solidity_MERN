@@ -21,10 +21,12 @@ const userStore = create((set) => ({
     login: async (email, password, role) => {
         set({ loading: true, error: null })
         try {
-            await axios.post('http://localhost:5000/api/auth/login', { email, password, role }, {
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password, role }, {
                 withCredentials: true
             })
-            await userStore.getState().fetchUser()
+            if (response.status === 200) {
+                set({ user: response.data.userdetails, error: null })
+            }
         } catch (error) {
             set({ error: error.response?.data?.message || "Login Failed" })
         } finally {
@@ -35,12 +37,15 @@ const userStore = create((set) => ({
     fetchUser: async () => {
         set({ loading: true, error: null })
         try {
-            const res = awaitaxios.post('http://localhost:5000/api/auth/profile', {
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/profile', {}, {
                 withCredentials: true
             })
-            set({ user: res.data.userdetails, error: null })
+            if (response.status === 200) {
+                set({ user: response.data.userdetails, error: null })
+            }
         } catch (error) {
-            set({ user: null })
+            set({ user: null, error: error.response?.data?.message || "Login Failed" })
+
         } finally {
             set({ loading: false })
         }
@@ -52,10 +57,17 @@ const userStore = create((set) => ({
         }))
     },
     studentRegister: async (email, password) => {
-        await axios.post('http://127.0.0.1:5000/students/register', { email, password }, {
-            withCredentials: true
-        })
         set({ loading: true, error: null })
+        try {
+
+            const response = await axios.post('http://127.0.0.1:5000/students/register', { email, password })
+            set({ user: response.data.userdetails, error: null })
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Registration Failed" })
+        } finally {
+            set({ loading: false })
+        }
+
     }
 
 }))

@@ -1,12 +1,12 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { userStore } from '@/store/UserStore'
 
 function RegisterPage() {
 
-    const { registrationForm } = userStore()
+    const { registrationForm, user, loading } = userStore()
 
     const router = useRouter()
 
@@ -20,6 +20,12 @@ function RegisterPage() {
             router.push("register/studentdetails")
         }
     }
+
+        useEffect(() => {
+            if (user && !loading) {
+                router.push(`/dashboard/${user.name}`)
+            }
+        }, [user, loading , router]) 
 
 
     return (

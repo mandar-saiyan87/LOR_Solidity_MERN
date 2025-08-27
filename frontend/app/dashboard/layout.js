@@ -1,44 +1,18 @@
 "use client"
 
-import React, { useEffect } from 'react'
-import { userStore } from "@/store/UserStore"
-import { useRouter } from "next/navigation"
+import React from 'react'
+import ProtectedRoutes from '../utils/ProtectedRoutes'
 
 
-function DashboardLayout({ children, params }) {
 
-    const { username } = params
+function DashboardLayout({ children }) {
 
-    const { user, fetchUser, loading } = userStore()
-
-    const router = useRouter()
-
-
-    useEffect(() => {
-
-        if (!user) {
-            fetchUser()
-        }
-
-    }, [user, fetchUser])
-
-
-    if (loading) return <p>Loading...</p>
-
-
-    if (!user) {
-        router.replace("/auth/login")
-        return null
-    }
-
-    if (user.name !== username) {
-        router.replace("/unauthorized");
-        return null;
-    }
 
     return (
         <>
-            {children}
+            <ProtectedRoutes>
+                {children}
+            </ProtectedRoutes>
         </>
     )
 }
