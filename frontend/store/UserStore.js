@@ -21,9 +21,7 @@ const userStore = create((set) => ({
     login: async (email, password, role) => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password, role }, {
-                withCredentials: true
-            })
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password, role })
             if (response.status === 200) {
                 set({ user: response.data.userdetails, error: null })
             }
@@ -33,13 +31,23 @@ const userStore = create((set) => ({
             set({ loading: false })
         }
     },
-    logout: null,
+    logout: async () => {
+        set({ loading: true, error: null })
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/logout')
+            if (response.status === 200) {
+                set({ user: null, error: null })
+            }
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Logout Failed" })
+        } finally {
+            set({ loading: false })
+        }
+    },
     fetchUser: async () => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post('http://127.0.0.1:5000/api/auth/profile', {}, {
-                withCredentials: true
-            })
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/profile')
             if (response.status === 200) {
                 set({ user: response.data.userdetails, error: null })
             }

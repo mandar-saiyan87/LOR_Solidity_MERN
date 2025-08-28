@@ -12,17 +12,16 @@ function LoginPage() {
     const [password, setPassword] = useState('')
     const [role, setRole] = useState('Student')
 
-    const { user, login, loading, error } = userStore()
-
     const router = useRouter()
 
+    const { user, loading, login, error } = userStore()
 
     useEffect(() => {
-        
+
         if (user && !loading) {
             router.push(`/dashboard/${user.name}`)
         }
-    }, [user, router])
+    }, [user, loading, router])
 
     function handleLogin(e) {
         e.preventDefault()

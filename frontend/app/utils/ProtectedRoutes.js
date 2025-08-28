@@ -2,7 +2,6 @@
 import React, { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { userStore } from '@/store/UserStore'
-import { unauthorized } from 'next/navigation'
 
 
 function ProtectedRoutes({ children }) {
@@ -23,7 +22,7 @@ function ProtectedRoutes({ children }) {
         if (user && !loading) {
             router.push(`/dashboard/${user.name}`)
         } else if (error || !user) {
-            unauthorized()
+            router.push("/auth/login")
         }
     }, [user, loading, error, router])
 
