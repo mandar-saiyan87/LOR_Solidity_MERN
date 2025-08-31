@@ -3,8 +3,11 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { userStore } from '@/store/UserStore'
+import { validate } from 'react-email-validator'
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 function RegisterPage() {
+
 
     const { registrationForm, user, loading } = userStore()
 
@@ -15,21 +18,49 @@ function RegisterPage() {
     const [confirmPass, setconfirmPass] = useState('')
 
     function handleRegistration() {
-        if (email && password && (password === confirmPass)) {
-            registrationForm({ email, password })
-            router.push("register/studentdetails")
+
+        if (!email || !validate(email)) {
+            toast.error('Enter valid email id');
+            return
         }
+
+        if (!password) {
+            toast.error('Enter password');
+            return
+        }
+
+        if (password !== confirmPass) {
+            toast.error("Password and Confirm Password doesn't match");
+            return
+        }
+
+        registrationForm({ email, password })
+        router.push("register/studentdetails")
+
     }
 
-        useEffect(() => {
-            if (user && !loading) {
-                router.push(`/dashboard/${user.name}`)
-            }
-        }, [user, loading , router]) 
+    useEffect(() => {
+        if (user && !loading) {
+            router.push(`/dashboard/${user.name}`)
+        }
+    }, [user, loading, router])
 
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+                transition={Bounce}
+            />
             <div className="w-full flex flex-col items-center justify-center sm:h-screen p-4">
                 <div className="w-full max-w-lg mx-auto border border-gray-300 rounded-2xl p-8">
                     <div className="text-center mb-12">
@@ -67,7 +98,7 @@ function RegisterPage() {
                                 Next
                             </button>
                         </div>
-                        <p className="text-slate-600 text-sm mt-6 text-center">Already have an account? <Link href="/auth/login" className="text-blue-600 font-medium hover:underline ml-1">Register Here</Link></p>
+                        <p className="text-slate-600 text-sm mt-6 text-center">Already have an account? <Link href="/auth/login" className="text-blue-600 font-medium hover:underline ml-1">Login Here</Link></p>
                     </form>
                 </div>
             </div>

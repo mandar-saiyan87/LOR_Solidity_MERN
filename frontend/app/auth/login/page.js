@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { userStore } from '@/store/UserStore'
 import { useRouter } from 'next/navigation'
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
 function LoginPage() {
@@ -11,6 +12,7 @@ function LoginPage() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [role, setRole] = useState('Student')
+
 
     const router = useRouter()
 
@@ -23,13 +25,36 @@ function LoginPage() {
         }
     }, [user, loading, router])
 
-    function handleLogin(e) {
+
+    async function handleLogin(e) {
         e.preventDefault()
-        login(email, password, role)
+        const result = await login(email, password, role)
+        if (result.status !== 200) {
+            toast.error(result.data.message)
+            return
+        }
+        setEmail('')
+        setPassword('')
+
     }
+
+
 
     return (
         <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick={false}
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+                transition={Bounce}
+            />
             <div className="w-full flex flex-col items-center justify-center sm:h-screen p-4">
 
                 <div className="w-full max-w-lg mx-auto border border-gray-300 rounded-2xl p-8">

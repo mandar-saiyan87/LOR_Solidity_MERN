@@ -5,6 +5,8 @@ import { generateToken } from "../utils/JWTHelper.js"
 export async function registerStudent(req, res) {
     const { name, email, password, walletaddress, role, authType } = req.body
 
+    // console.log(`${name}, ${email}, ${password}, ${walletaddress}, ${role}, ${authType}`)
+
     try {
         // Check for email already exist
         if (email) {
@@ -40,7 +42,9 @@ export async function registerStudent(req, res) {
 
             const student = await Student.create({ name, email, password: passwordHash, walletaddress: [walletaddress], role, authType })
 
-            const token = generateToken(student)
+            const { password: userPassword, ...studentdetails } = student.toObject();
+
+            const token = generateToken(studentdetails)
 
             res.cookie('auth_token', token, {
                 httpOnly: true,
@@ -50,17 +54,25 @@ export async function registerStudent(req, res) {
             })
 
 
-            return res.status(201).json({ message: "Student registered successfully", student })
+            return res.status(201).json({ message: "Student registered successfully", studentdetails })
         }
 
         // If authType is wallet, create user without password nad generate token
 
         else {
-            const student = await Student.create({ name, email, walletaddress, role, authType }).select('-password')
+            const studentdetails = await Student.create({ name, email, walletaddress, role, authType }).select('-password')
 
-            const token = generateToken(student)
+            const token = generateToken(studentdetails)
 
-            return res.status(201).json({ message: "Student registered successfully", student, token })
+            res.cookie('auth_token', token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === 'production',
+                sameSite: 'strict',
+                maxAge: 24 * 60 * 60 * 1000
+            })
+
+
+            return res.status(201).json({ message: "Student registered successfully", studentdetails })
         }
     } catch (error) {
         if (error.name === "ValidationError") {

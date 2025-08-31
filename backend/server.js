@@ -3,7 +3,7 @@ import cors from "cors"
 import cookieParser from "cookie-parser"
 import connectDB from "./config/db.js"
 import studentrouter from "./routes/studentRoutes.js"
-import authrouter from "./routes/AuthRoutes.js"
+import authrouter from "./routes/authRoutes.js"
 import approverrouter from "./routes/approverRoutes.js"
 
 

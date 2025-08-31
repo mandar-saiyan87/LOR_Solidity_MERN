@@ -1,7 +1,7 @@
 // Logout route included
 import express from "express";
 import { verifyToken } from "../middleware/verifyToken.js"
-import { LoginController, GetUserController, LogoutController } from "../controllers/AuthController.js";
+import { LoginController, GetUserController, LogoutController } from "../controllers/authController.js";
 
 const authrouter = express.Router();
 
