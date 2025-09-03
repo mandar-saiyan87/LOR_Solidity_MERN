@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import axios, { get } from 'axios'
+import axios from 'axios'
 
 
 axios.defaults.withCredentials = true
@@ -9,16 +9,6 @@ const userStore = create((set) => ({
     user: null,
     loading: false,
     error: null,
-    registrationData: {
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        walletaddress: '',
-        role: 'Student',
-        authType: 'email'
-    },
-
     login: async (email, password, role) => {
         set({ loading: true, error: null })
         try {
@@ -65,29 +55,14 @@ const userStore = create((set) => ({
         }
 
     },
-    registrationForm: (data) => {
-        set((state) => ({
-            registrationData: { ...state.registrationData, ...data }
-        }))
-    },
-    studentRegister: async () => {
+
+    studentRegister: async (username, email, password, role, authType) => {
         set({ loading: true, error: null })
         try {
 
-            const response = await axios.post('http://127.0.0.1:5000/api/students/register', { ...userStore.getState().registrationData })
-            if (response.status !== 200) {
+            const response = await axios.post('http://127.0.0.1:5000/api/students/register', { username, email, password, role: "Student", authType: "email" })
+            if (response.status === 200) {
                 set({ user: response.data.studentdetails, error: null })
-                set((state) => ({
-                    registrationData: {
-                        ...state.registrationData,
-                        name: '',
-                        email: '',
-                        password: '',
-                        walletaddress: '',
-                        role: 'Student',
-                        authType: 'email'
-                    }
-                }))
                 return response
             }
 

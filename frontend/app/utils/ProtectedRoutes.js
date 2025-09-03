@@ -20,7 +20,7 @@ function ProtectedRoutes({ children }) {
 
     useEffect(() => {
         if (user && !loading) {
-            router.push(`/dashboard/${user.name}`)
+            router.push(`/dashboard/${user.username ? user.username : user.name}`)
         } else if (error || !user) {
             router.push("/auth/login")
         }

@@ -1,5 +1,5 @@
-import { ethers } from "ethers"
+import { isAddress } from "viem";
 
 export function isvalidWalletAddress(address) {
-    return ethers.isAddress(address)
+    return isAddress(address)
 }

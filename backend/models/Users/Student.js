@@ -1,9 +1,12 @@
 import mongoose from "mongoose";
 
 const studentSchema = new mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
+    },
+    fullname: {
+        type: String,
     },
     email: {
         type: String,
@@ -21,17 +24,7 @@ const studentSchema = new mongoose.Schema({
     },
     walletaddress: {
         type: [String],
-        required: [true, "At least one wallet address is required"],
-        validate: [
-            {
-                validator: arr => arr.length > 0,
-                message: "At least one wallet address is required"
-            },
-            {
-                validator: arr => new Set(arr).size === arr.length,
-                message: "Duplicate wallet addresses in the same account"
-            }
-        ]
+        unique: true
     },
     role: {
         type: String,

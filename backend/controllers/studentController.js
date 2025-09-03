@@ -1,11 +1,8 @@
 import Student from "../models/Users/Student.js"
 import bcrypt from "bcrypt"
-import { isvalidWalletAddress } from "../utils/verifyPublicAddress.js"
 import { generateToken } from "../utils/JWTHelper.js"
 export async function registerStudent(req, res) {
-    const { name, email, password, walletaddress, role, authType } = req.body
-
-    // console.log(`${name}, ${email}, ${password}, ${walletaddress}, ${role}, ${authType}`)
+    const { username, email, password, role, authType } = req.body
 
     try {
         // Check for email already exist
@@ -16,31 +13,12 @@ export async function registerStudent(req, res) {
             }
         }
 
-        // Check for wallet address present in body
-        if (!walletaddress) {
-            return res.status(400).json({ message: "Wallet address is required" })
-        }
-
-        // Check if address is valid
-        const validwalletaddress = isvalidWalletAddress(walletaddress)
-
-        if (!validwalletaddress) {
-            return res.status(400).json({ message: "Invalid wallet address" })
-        }
-
-        // Check for wallet address already exist
-        const walletExist = await Student.findOne({ walletaddress })
-        if (walletExist) {
-            return res.status(400).json({ message: "Wallet address already exists" })
-        }
-
-
         // Check for authType, hash password and create student account and generate token
         if (authType === "email") {
 
             const passwordHash = await bcrypt.hash(password, 10)
 
-            const student = await Student.create({ name, email, password: passwordHash, walletaddress: [walletaddress], role, authType })
+            const student = await Student.create({ username, email, password: passwordHash, role, authType })
 
             const { password: userPassword, ...studentdetails } = student.toObject();
 
@@ -52,29 +30,11 @@ export async function registerStudent(req, res) {
                 sameSite: 'strict',
                 maxAge: 24 * 60 * 60 * 1000
             })
-
-
-            return res.status(201).json({ message: "Student registered successfully", studentdetails })
+            return res.status(200).json({ message: "Student registered successfully", studentdetails })
         }
 
-        // If authType is wallet, create user without password nad generate token
-
-        else {
-            const studentdetails = await Student.create({ name, email, walletaddress, role, authType }).select('-password')
-
-            const token = generateToken(studentdetails)
-
-            res.cookie('auth_token', token, {
-                httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
-                maxAge: 24 * 60 * 60 * 1000
-            })
-
-
-            return res.status(201).json({ message: "Student registered successfully", studentdetails })
-        }
     } catch (error) {
+        console.log(error)
         if (error.name === "ValidationError") {
             const messages = Object.values(error.errors).map(err => err.message);
             return res.status(400).json({ errors: messages });

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
+
 function LoginPage() {
 
 
@@ -21,7 +22,7 @@ function LoginPage() {
     useEffect(() => {
 
         if (user && !loading) {
-            router.push(`/dashboard/${user.name}`)
+            router.push(`/dashboard/${user.username ? user.username : user.name}`)
         }
     }, [user, loading, router])
 
@@ -30,7 +31,7 @@ function LoginPage() {
         e.preventDefault()
         const result = await login(email, password, role)
         if (result.status !== 200) {
-            toast.error(result.data.message)
+            toast.error(result.data?.message)
             return
         }
         setEmail('')
@@ -38,7 +39,7 @@ function LoginPage() {
 
     }
 
-
+    if (loading) return <p>Loading...</p>
 
     return (
         <>
@@ -98,6 +99,7 @@ function LoginPage() {
                         <p className="text-slate-600 text-sm mt-6 text-center">Don't have an account? <Link href="/auth/register" className="text-blue-600 font-medium hover:underline ml-1">Register Here</Link></p>
                     </form>
                 </div>
+
             </div>
         </>
     )
