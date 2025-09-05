@@ -11,7 +11,7 @@ function Navbar({ username }) {
 
     function handleLogout() {
         logout()
-        router.push('/auth/login')
+        router.push('/auth/users')
     }
 
     return (

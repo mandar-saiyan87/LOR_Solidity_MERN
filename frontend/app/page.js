@@ -1,8 +1,8 @@
 "use client"
 import React, { useEffect } from "react";
-import LoginPage from "./auth/login/page";
 import { useRouter } from "next/navigation";
 import { userStore } from "@/store/UserStore";
+import UsersAuth from "./auth/users/page";
 
 
 
@@ -30,7 +30,7 @@ export default function Home() {
 
   return (
     <>
-      <LoginPage />
+      <UsersAuth />
     </>
 
   );

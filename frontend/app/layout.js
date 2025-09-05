@@ -1,5 +1,5 @@
 import "./globals.css";
-
+import { Web3Provider } from "./Web3Provider";
 
 
 export const metadata = {
@@ -11,7 +11,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        {children}
+        <Web3Provider>
+          {children}
+        </Web3Provider>
       </body>
     </html>
   );
