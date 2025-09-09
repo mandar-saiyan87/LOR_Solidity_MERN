@@ -1,14 +1,21 @@
 import mongoose from "mongoose";
 
+const allowedDomains = ["exampleuniversity.edu"]
+
 const AdminSchema = mongoose.Schema({
-    name: {
+    username: {
         type: String,
         required: true
     },
     email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        validate: function (value) {
+            const domain = value.split("@")[1];
+            return allowedDomains.includes(domain);
+        },
+        message: "Only university email addresses are allowed"
     },
     password: {
         type: String,

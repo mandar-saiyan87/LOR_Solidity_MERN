@@ -9,8 +9,9 @@ const userStore = create((set) => ({
     user: null,
     loading: false,
     error: null,
+
     login: async (email, password, role) => {
-        set({ loading: true, error: null })
+        set({ error: null })
         try {
             const response = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password, role })
             if (response.status === 200) {
@@ -20,8 +21,6 @@ const userStore = create((set) => ({
         } catch (error) {
             set({ error: error.response?.data?.message || "Login Failed" })
             return error.response
-        } finally {
-            set({ loading: false })
         }
     },
     logout: async () => {
@@ -72,8 +71,23 @@ const userStore = create((set) => ({
         } finally {
             set({ loading: false })
         }
+    },
 
-    }
+    walletLogin: async (walletaddress, email) => {
+        set({ loading: true, error: null })
+        try {
+            const response = await axios.post('http://127.0.0.1:5000/api/auth/walletlogin', { walletaddress, email, role: "Student", authType: "email" })
+            if (response.status === 200) {
+                set({ user: response.data.userDetails, error: null })
+                return response
+            }
+        } catch (error) {
+            set({ error: error.response?.data?.message || "Login Failed" })
+            return error.response
+        } finally {
+            set({ loading: false })
+        }
+    },
 
 }))
 

@@ -1,15 +1,18 @@
 import Approver from "../models/Users/Approver.js"
 import bcrypt from "bcrypt"
-import { generateToken } from "../utils/JWTHelper.js"
+import {validateEmail} from "../utils/emailValidate.js"
 import { isvalidWalletAddress } from "../utils/verifyPublicAddress.js"
 
-export async function createapprover(req, res) {
+export async function CreateApproverController(req, res) {
 
-    const { name, email, password, walletaddress, designation, department } = req.body
+    const { username, email, password, walletaddress, designation, department } = req.body
 
     try {
 
         if (email) {
+            if (!validateEmail(email)) {
+                return res.status(400).json({ message: "Enter valid email id, Only university email id allowed!" })
+            }
 
             const emailExist = await Approver.findOne({ email })
             if (emailExist) {
@@ -17,9 +20,11 @@ export async function createapprover(req, res) {
             }
         }
 
+
         if (!walletaddress) {
             return res.status(400).json({ message: "Wallet address is required" })
         }
+
 
         const validwalletaddress = isvalidWalletAddress(walletaddress)
 
@@ -36,7 +41,7 @@ export async function createapprover(req, res) {
         const passwordHash = await bcrypt.hash(password, 10)
 
         const newApprover = await Approver.create({
-            name,
+            username,
             email,
             password: passwordHash,
             walletaddress,

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { userStore } from '@/store/UserStore'
 import { useRouter } from 'next/navigation'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
+import { validateEmail } from '@/app/utils/emailValidate';
 
 
 
@@ -20,14 +21,20 @@ function Login({ setShowLogin }) {
 
     useEffect(() => {
 
-        if (user && !loading) {
-            router.push(`/dashboard/${user.username ? user.username : user.name}`)
+        if (!loading && user) {
+            router.replace(`/dashboard/${user.username ? user.username : user.email}`)
         }
     }, [user, loading, router])
 
 
     async function handleLogin(e) {
         e.preventDefault()
+
+        if (!validateEmail(email)) {
+            toast.error('Enter valid email id, Only university email id allowed!');
+            return
+        }
+
         const result = await login(email, password, role)
         if (result.status !== 200) {
             toast.error(result.data?.message)
@@ -35,10 +42,9 @@ function Login({ setShowLogin }) {
         }
         setEmail('')
         setPassword('')
-
     }
 
-    if (loading) return <p>Loading...</p>
+    // if (loading) return <p>Loading...</p>
 
     return (
         <>

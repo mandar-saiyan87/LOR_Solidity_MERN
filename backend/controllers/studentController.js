@@ -1,12 +1,18 @@
 import Student from "../models/Users/Student.js"
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/JWTHelper.js"
+import {validateEmail} from "../utils/emailValidate.js"
 export async function registerStudent(req, res) {
     const { username, email, password, role, authType } = req.body
 
     try {
         // Check for email already exist
         if (email) {
+
+            if (!validateEmail(email)) {
+                return res.status(400).json({ message: "Enter valid email id, Only university email id allowed!" })
+            }
+
             const emailexists = await Student.findOne({ email })
             if (emailexists) {
                 return res.status(400).json({ message: "Email already exists" })

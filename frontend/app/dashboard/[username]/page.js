@@ -12,7 +12,7 @@ function Dashboard() {
   return (
     <>
       <div className='w-full min-h-screen flex flex-col px-5'>
-        <Navbar username={user.name ? user.name : user.email} />
+        <Navbar username={user.username ? user.username : user.email} />
       </div>
     </>
   )

@@ -34,8 +34,8 @@ const seedAdmin = async () => {
     }
 
     // Admin Inputs from user
-    const name = "admin"
-    console.log(`Admin User: ${name}`)
+    const username = "admin"
+    console.log(`Admin User: ${username}`)
 
     // Ask password and confirm
     let passwordConfirm = false
@@ -61,7 +61,7 @@ const seedAdmin = async () => {
     }
 
 
-    const email = "admin@example.com"
+    const email = "admin@exampleuniversity.edu"
     console.log(`Admin Email: ${email}`)
 
     // Ask wallet address and confirm
@@ -90,19 +90,19 @@ const seedAdmin = async () => {
 
             const hashedPassword = await bcrypt.hash(password, 10)
             const admin = await Admin.create({
-                name,
+                username,
                 email,
                 password: hashedPassword,
                 walletaddress: walletAddress,
                 role: "Admin"
             })
             console.log(`Admin created: ${admin.email}`)
+            return
         }
 
     } catch (error) {
         console.log(error)
     }
-    return
 
 }
 

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { userStore } from '@/store/UserStore'
-import { validate } from 'react-email-validator'
+import { validateEmail } from '@/app/utils/emailValidate'
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
@@ -18,15 +18,15 @@ function Register({ setShowLogin }) {
     const [password, setPassword] = useState('')
     const [confirmPass, setconfirmPass] = useState('')
 
-    function handleRegistration(e) {
+    async function handleRegistration(e) {
         e.preventDefault()
         if (username.length === 0 || username.length > 20) {
             toast.error('Username required, should not be more than 20 characters');
             return
         }
 
-        if (!email || !validate(email)) {
-            toast.error('Enter valid email id');
+        if (!email || !validateEmail(email)) {
+            toast.error('Enter valid email id, Only university email id allowed!');
             return
         }
 
@@ -40,7 +40,7 @@ function Register({ setShowLogin }) {
             return
         }
 
-        const result = studentRegister(username, email, password)
+        const result = await studentRegister(username, email, password)
         if (result.status !== 200) {
             toast.error(result.data?.message)
             return
@@ -52,8 +52,8 @@ function Register({ setShowLogin }) {
     }
 
     useEffect(() => {
-        if (user && !loading) {
-            router.push(`/dashboard/${user.username ? user.username : user.name}`)
+        if (!loading && user) {
+            router.push(`/dashboard/${user.username ? user.username : user.email}`)
         }
     }, [user, loading, router])
 

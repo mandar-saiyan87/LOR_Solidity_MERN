@@ -2,14 +2,18 @@
 import React from 'react'
 import { userStore } from '@/store/UserStore'
 import { useRouter } from 'next/navigation'
+import { useDisconnect } from 'wagmi'
 
 function Navbar({ username }) {
+
+    const { disconnect } = useDisconnect()
 
     const { logout } = userStore()
 
     const router = useRouter()
 
     function handleLogout() {
+        disconnect()
         logout()
         router.push('/auth/users')
     }
