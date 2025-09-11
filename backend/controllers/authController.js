@@ -1,19 +1,11 @@
 
 // Logout function is also included in same file at the bottom
 
-import Student from "../models/Users/Student.js"
-import Admin from "../models/Users/Admin.js"
-import Approver from "../models/Users/Approver.js"
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/JWTHelper.js"
 import { validateEmail } from "../utils/emailValidate.js"
+import { UserRoles } from "./userRoles.js"
 
-
-const UserRoles = {
-    student: Student,
-    admin: Admin,
-    approver: Approver
-}
 
 
 export async function LoginController(req, res) {

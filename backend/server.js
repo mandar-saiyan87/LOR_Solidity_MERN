@@ -5,6 +5,7 @@ import connectDB from "./config/db.js"
 import studentrouter from "./routes/studentRoutes.js"
 import authrouter from "./routes/authRoutes.js"
 import approverrouter from "./routes/approverRoutes.js"
+import userupdaterouter from "./routes/userUpdateRoute.js"
 
 
 
@@ -25,6 +26,7 @@ app.use(cookieParser())
 app.use("/api/students", studentrouter)
 app.use("/api/auth", authrouter)
 app.use("/api/approver", approverrouter)
+app.use("/api/user", userupdaterouter)
 
 
 

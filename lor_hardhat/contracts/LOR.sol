@@ -58,7 +58,7 @@ contract LOR {
         string memory _program,
         string memory _university
     ) external {
-        require(_requestId > 0, "nvalid Id");
+        require(_requestId > 0, "Invalid Id");
         require(
             lorRequests[_requestId].studentAddress == address(0),
             "Request already exists"

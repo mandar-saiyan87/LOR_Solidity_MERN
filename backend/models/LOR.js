@@ -18,6 +18,10 @@ const LORSchema = new mongoose.Schema({
             required: true
         }
     },
+    full_name: {
+        type: String,
+        required: true
+    },
     approver: {
         userId: {
             type: mongoose.Schema.Types.ObjectId,

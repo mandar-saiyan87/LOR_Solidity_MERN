@@ -14,18 +14,6 @@ export default function Home() {
   const { loading } = userStore()
 
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     fetchUser()
-  //   }
-  // }, [user, fetchUser])
-
-  // useEffect(() => {
-  //   if (user && !loading) {
-  //     router.push(`/dashboard/${user.username ? user.username : user.email}`)
-  //   }
-  // }, [user, loading, router])
-
   if (loading) {
     return (
       <ScaleLoader

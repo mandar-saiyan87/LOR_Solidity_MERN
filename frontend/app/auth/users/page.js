@@ -19,11 +19,13 @@ function UsersAuth() {
 
     const router = useRouter()
 
-    const { isConnected, address, isDisconnected } = useAccount()
+    const { isConnected, address } = useAccount()
     const [showLogin, setShowLogin] = useState(true)
     const [isEmail, setIsEmail] = useState(false)
     const [email, setEmail] = useState('')
 
+
+ 
 
     useEffect(() => {
         async function usewalletlogin() {
@@ -67,7 +69,6 @@ function UsersAuth() {
             toast.error('Enter valid email id, Only university email id allowed!');
             return
         }
-        setLoading(true)
         const result = walletLogin(address, email)
         if (result.status !== 200) {
             disconnect()
