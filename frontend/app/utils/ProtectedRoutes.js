@@ -10,11 +10,11 @@ function ProtectedRoutes({ children }) {
 
     const { user, fetchUser, loading, error } = userStore()
 
-    useEffect(() => {
-        if (!user) {
-            fetchUser()
-        }
-    }, [user, fetchUser])
+    // useEffect(() => {
+    //     if (!user) {
+    //         fetchUser()
+    //     }
+    // }, [user, fetchUser])
 
 
 

@@ -25,7 +25,7 @@ function UsersAuth() {
     const [email, setEmail] = useState('')
 
 
- 
+
 
     useEffect(() => {
         async function usewalletlogin() {
@@ -59,6 +59,7 @@ function UsersAuth() {
         if (!loading && user) {
             router.replace(`/dashboard/${user.username ? user.username : user.email}`)
         }
+
     }, [user, loading, router])
 
 

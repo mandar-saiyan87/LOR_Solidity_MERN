@@ -7,7 +7,7 @@ axios.defaults.withCredentials = true
 
 
 const userStore = create((set) => ({
-    user: DUMMY_USER[0] || null,
+    user: null,
     loading: false,
     error: null,
 
