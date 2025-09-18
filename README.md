@@ -45,8 +45,15 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
 
 ### 🚧 In Progress
 - Frontend UI in React/Next.js
-- Backend REST API (user auth, request management)
+- Backend REST API (request management, listen to smart contract events)
 - Integration with IPFS and blockchain
 - Web3 wallet connection & transaction handling
+
+---
+
+## 🌍 Live Project
+
+🚧 The project is still **in progress**, but you can check out the live version here:  
+👉 [LOR DApp - Live Demo](https://lor-solidity-frontend.vercel.app/)
 
 ---
