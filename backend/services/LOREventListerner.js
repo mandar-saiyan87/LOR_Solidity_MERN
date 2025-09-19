@@ -1,4 +1,4 @@
-import contract from "../utils/ethersprovider";
+import contract from "../utils/ethersprovider.js"
 
 export function LOREventListerner() {
 
