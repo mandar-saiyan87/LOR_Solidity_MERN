@@ -1,5 +1,5 @@
 import { ethers } from "ethers";
-import contractabi from "../contracts/LORABI.json"
+import contractabi from "../contracts/LORABI.json" with { type: 'json'}
 import dotenv from "dotenv"
 
 dotenv.config()
