@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { config } from "dotenv";
-import { LOREventListerner } from "../services/LOREventListerner";
+import { LOREventListerner } from "../services/LOREventListerner.js";
 
 config()
 
