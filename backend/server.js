@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser"
 import connectDB from "./config/db.js"
 import studentrouter from "./routes/studentRoutes.js"
 import authrouter from "./routes/authRoutes.js"
-import approverrouter from "./routes/approverRoutes.js" 
+import approverrouter from "./routes/approverRoutes.js"
 import userupdaterouter from "./routes/userUpdateRoute.js"
 
 
@@ -20,6 +20,8 @@ app.use(cors({
         "https://lor-solidity-frontend.vercel.app",
         "http://localhost:3000"
     ],
+    // origin: (origin, callback) => {
+    //     callback(null, origin || true);     },
     credentials: true
 }))
 app.use(express.json())

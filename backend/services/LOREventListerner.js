@@ -7,6 +7,6 @@ export function LOREventListerner() {
     contract.on("LORRequested", (requestId, student, event) => {
         console.log('requestId: ', requestId),
             console.log('Student: ', student),
-            console.log('TxHash:', event.transactionHash)
+            console.log('TxHash:', event.log.transactionHash)
     })
 }

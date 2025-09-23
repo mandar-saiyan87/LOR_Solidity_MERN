@@ -5,7 +5,7 @@ import {
     getDefaultConfig,
     RainbowKitProvider,
 } from '@rainbow-me/rainbowkit';
-import { WagmiProvider } from 'wagmi';
+import { WagmiProvider, http } from 'wagmi';
 import {
     sepolia
 } from 'wagmi/chains';
@@ -19,6 +19,9 @@ const config = getDefaultConfig({
     appName: 'LOR Portal',
     projectId: process.env.NEXT_PUBLIC_RAINBOWKIT_APP_ID,
     chains: [sepolia],
+    transports: {
+        [sepolia.id]: http(process.env.NEXT_PUBLIC_RPC_URL)
+    }
 
 });
 
