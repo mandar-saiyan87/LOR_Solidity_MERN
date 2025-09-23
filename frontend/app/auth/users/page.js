@@ -71,7 +71,7 @@ function UsersAuth() {
         userStore.setState({ loading: true })
         if (result.status !== 200) {
             userStore.setState({ loading: false })
-            disconnect()
+            // disconnect()
             toast.error(result.data?.message)
             return
         }
