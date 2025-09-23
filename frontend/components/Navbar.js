@@ -13,8 +13,8 @@ function Navbar({ username }) {
     const router = useRouter()
 
     function handleLogout() {
-        disconnect()
         logout()
+        disconnect()
         router.push('/auth/users')
     }
 
