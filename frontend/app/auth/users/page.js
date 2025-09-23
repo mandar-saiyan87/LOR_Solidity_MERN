@@ -36,7 +36,7 @@ function UsersAuth() {
             // console.log(address)
             const result = await walletLogin(address)
             userStore.setState({ loading: true })
-            console.log(result)
+            // console.log(result)
             if (result?.status !== 200) {
                 userStore.setState({ loading: false })
                 setIsEmail(true)
@@ -75,7 +75,7 @@ function UsersAuth() {
             toast.error(result.data?.message)
             return
         }
-        
+
         userStore.setState({ loading: false })
         setIsEmail(false)
         setEmail('')
