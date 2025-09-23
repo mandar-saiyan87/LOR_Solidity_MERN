@@ -4,7 +4,9 @@ export function LOREventListerner() {
 
     console.log("📡 Starting LOR event listener.....");
 
-    contract.on("LORRequested", (event) => {
-        console.log(event)
+    contract.on("LORRequested", (requestId, student, event) => {
+        console.log('requestId: ', requestId),
+            console.log('Student: ', student),
+            console.log('TxHash:', event.transactionHash)
     })
 }

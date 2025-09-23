@@ -26,42 +26,39 @@ function UsersAuth() {
 
 
 
-
     useEffect(() => {
         async function usewalletlogin() {
-            if (isConnected) {
-                // console.log(address)
-                const result = await walletLogin(address, email)
-                if (result.status === 404) {
-                    setIsEmail(true)
-                    return
-                }
+            if (!isConnected || !address) {
                 setIsEmail(false)
                 setEmail('')
-
-
+                return
             }
-            else {
-                // console.log("Not connected / Disconnected")
-                setIsEmail(false)
-                setEmail('')
+            // console.log(address)
+            const result = await walletLogin(address)
+            userStore.setState({ loading: true })
+            console.log(result)
+            if (result?.status !== 200) {
+                userStore.setState({ loading: false })
+                setIsEmail(true)
+                return
             }
+            userStore.setState({ loading: false })
+            setIsEmail(false)
+            setEmail('')
         }
+
 
         usewalletlogin()
 
     }, [isConnected, address])
 
 
-
     useEffect(() => {
-
         if (!loading && user) {
             router.replace(`/dashboard/${user.username ? user.username : user.email}`)
         }
 
     }, [user, loading, router])
-
 
 
     function handlewalletLogin() {
@@ -71,11 +68,15 @@ function UsersAuth() {
             return
         }
         const result = walletLogin(address, email)
+        userStore.setState({ loading: true })
         if (result.status !== 200) {
+            userStore.setState({ loading: false })
             disconnect()
             toast.error(result.data?.message)
             return
         }
+        
+        userStore.setState({ loading: false })
         setIsEmail(false)
         setEmail('')
     }

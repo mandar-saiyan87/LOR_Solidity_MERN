@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { userStore } from '@/store/UserStore'
 import Navbar from '@/components/Navbar'
 import { useConnect, useAccount, useDisconnect } from "wagmi";
 import { injected } from "wagmi/connectors";
 import CreateLORModal from '@/components/CreateLORModal';
+import { ToastContainer, toast, Bounce } from 'react-toastify';
 
 
 function Dashboard() {
@@ -23,22 +24,52 @@ function Dashboard() {
     const connections = await connectAsync({ connector: injected() })
   }
 
-  function handleuserUpdate(e) {
-    e.preventDefault()
-    if (user.walletaddress.includes(address)) {
-      console.log("Address Included")
-      return
+
+
+  useEffect(() => {
+    async function handleuserAddressUpdate() {
+
+      if (isConnected) {
+        if (!user.walletaddress.includes(address)) {
+          // console.log("Address Included")
+          // return
+          user.walletaddress.push(address)
+          const result = await updateUser({
+            email: user.email,
+            role: user.role,
+            walletaddress: user.walletaddress
+          })
+          if (result.status === 200) {
+            toast.success('New address updated successfully')
+          }
+        }
+      }
+
     }
-    user.walletaddress.push(address)
-    const result = updateUser({
-      email: user.email,
-      role: user.role,
-      walletaddress: user.walletaddress
-    })
-  }
+
+    handleuserAddressUpdate()
+  }, [isConnected, address])
+
+
+
 
   return (
     <>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        transition={Bounce}
+      />
+
       {
         modal && <CreateLORModal isModal={setModal} />
       }

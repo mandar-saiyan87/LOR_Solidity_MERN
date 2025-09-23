@@ -1,4 +1,4 @@
-export const DUMMY_USER = [{
+[{
   "_id": {
     "$oid": "68bc60bf314758f9c06f9a98"
   },
@@ -34,6 +34,24 @@ export const DUMMY_USER = [{
   },
   "updatedAt": {
     "$date": "2025-09-08T15:38:15.933Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68c8f1934dce29911b577161"
+  },
+  "username": "TestingUser1",
+  "email": "testUser@exampleuniversity.edu",
+  "password": "$2b$10$sopJ.zwRX5IorWlQnGNHJemJiDiDCMY3xwikhuzIEM7VquDyMQCIW",
+  "walletaddress": [],
+  "role": "Student",
+  "authType": "email",
+  "createdAt": {
+    "$date": "2025-09-16T05:11:47.655Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-16T05:11:47.655Z"
   },
   "__v": 0
 }]

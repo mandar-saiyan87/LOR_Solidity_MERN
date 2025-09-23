@@ -4,7 +4,7 @@ import cookieParser from "cookie-parser"
 import connectDB from "./config/db.js"
 import studentrouter from "./routes/studentRoutes.js"
 import authrouter from "./routes/authRoutes.js"
-import approverrouter from "./routes/approverRoutes.js"
+import approverrouter from "./routes/approverRoutes.js" 
 import userupdaterouter from "./routes/userUpdateRoute.js"
 
 
@@ -16,7 +16,10 @@ const app = express()
 const port = 5000
 
 app.use(cors({
-    origin: "https://lor-solidity-frontend.vercel.app",
+    origin: [
+        "https://lor-solidity-frontend.vercel.app",
+        "http://localhost:3000"
+    ],
     credentials: true
 }))
 app.use(express.json())

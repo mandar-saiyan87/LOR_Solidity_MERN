@@ -76,24 +76,25 @@ const userStore = create((set) => ({
         }
     },
 
-    walletLogin: async (walletaddress, email) => {
-        set({ loading: true, error: null })
+    walletLogin: async (walletaddress, email = '') => {
+        // set({ loading: true, error: null })
+        set({ error: null })
         try {
             const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/walletlogin`, { walletaddress, email, role: "Student", authType: "email" })
             if (response.status === 200) {
                 set({ user: response.data.userDetails, error: null })
                 return response
             }
+
         } catch (error) {
             set({ error: error.response?.data?.message || "Login Failed" })
             return error.response
-        } finally {
-            set({ loading: false })
         }
+        
     },
 
     updateUser: async (userdetails) => {
-        set({ loading: true, error: null })
+        // set({ loading: true, error: null })
         try {
             const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/updatedetails`, userdetails)
             if (response.status === 200) {
@@ -103,9 +104,10 @@ const userStore = create((set) => ({
         } catch (error) {
             set({ error: error.response?.data?.message || "Update Failed" })
             return error.response
-        } finally {
-            set({ loading: false })
         }
+        // finally {
+        //     set({ loading: false })
+        // }
     }
 
 }))
