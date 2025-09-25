@@ -7,52 +7,67 @@ const LORSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    student: {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Student",
-            required: true
-        },
-        walletaddress: {
-            type: String,
-            required: true
-        }
-    },
-    full_name: {
+
+    studentAddress: {
         type: String,
         required: true
     },
-    approver: {
-        userId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Approver",
-            required: true
-        },
-        walletaddress: {
-            type: String
-        }
+
+    requesterAddress: {
+        type: String,
+        required: true
     },
-    metadata: {
-        pupose: { type: String, required: true },
-        university: { type: String, required: true },
-        description: { type: String },
+
+    approverAddress: {
+        type: String,
+        default: null
     },
+
+    fullName: {
+        type: String,
+        required: true
+    },
+
+    program: {
+        type: String,
+        required: true
+    },
+
+    university: {
+        type: String,
+        required: true
+    },
+
     status: {
         type: String,
         enum: ["PENDING", "APPROVED", "REJECTED"],
         default: "PENDING"
     },
+
     txHash: {
         type: String,
         required: true
     },
-    blocknumber: {
+
+    blockNumber: {
         type: Number
     },
-    timestamps: {
-        requestedAt: { type: Date, default: Date.now },
-        approvedAt: { type: Date },
-        rejectedAt: { type: Date },
+
+    pdfLink: {
+        type: String // IPFS CID or full gateway URL
     },
+
+    requestedAt: {
+        type: Date,
+        default: Date.now
+    },
+
+    approvedAt: {
+        type: Date
+    },
+
+    rejectedAt: {
+        type: Date
+    }
 })
 
