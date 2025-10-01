@@ -1,7 +1,7 @@
 import Student from "../models/Users/Student.js"
 import bcrypt from "bcrypt"
 import { generateToken } from "../utils/JWTHelper.js"
-import {validateEmail} from "../utils/emailValidate.js"
+import { validateEmail } from "../utils/emailValidate.js"
 export async function registerStudent(req, res) {
     const { username, email, password, role, authType } = req.body
 
@@ -32,8 +32,10 @@ export async function registerStudent(req, res) {
 
             res.cookie('auth_token', token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === 'production',
-                sameSite: 'strict',
+                secure: process.env.NODE_ENV === "production", // true only if NODE_ENV=production
+
+                // sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+                sameSite: "lax",
                 maxAge: 24 * 60 * 60 * 1000
             })
             return res.status(200).json({ message: "Student registered successfully", studentdetails })

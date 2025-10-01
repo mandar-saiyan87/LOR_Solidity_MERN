@@ -7,6 +7,11 @@ const LORSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
+    studentId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Student",
+        default: null
+    },
 
     studentAddress: {
         type: String,
@@ -23,7 +28,7 @@ const LORSchema = new mongoose.Schema({
         default: null
     },
 
-    fullName: {
+    fullname: {
         type: String,
         required: true
     },
@@ -70,4 +75,7 @@ const LORSchema = new mongoose.Schema({
         type: Date
     }
 })
+
+const LORRequest = mongoose.model("LORRequest", LORSchema)
+export default LORRequest
 

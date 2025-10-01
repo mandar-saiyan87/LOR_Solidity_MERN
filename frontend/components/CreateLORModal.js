@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react'
-import { userStore } from '@/store/UserStore'
 import { useAccount } from "wagmi";
 import { generateRandomId } from '@/app/utils/randomLORId';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
@@ -9,7 +8,7 @@ import { useLORCreate } from '@/app/hooks/useLORCreate';
 
 function CreateLORModal({ isModal }) {
 
-    const { user } = userStore()
+
 
     const { address, isConnected } = useAccount();
 
@@ -38,11 +37,11 @@ function CreateLORModal({ isModal }) {
     }
 
     useEffect(() => {
-        if (isSuccess) {
+        if (isSuccess && txHash) {
             setName('')
             setProgram('')
         }
-    }, [isSuccess])
+    }, [isSuccess, txHash])
 
 
     return (
@@ -74,7 +73,7 @@ function CreateLORModal({ isModal }) {
                     <form className='flex flex-col gap-3'>
                         <label className='flex flex-col'>
                             Name
-                            <input type="text" name="name" className='p-2 border rounded-lg' onChange={(e) => setName(e.target.value)} />
+                            <input type="text" name="name" className='p-2 border rounded-lg' onChange={(e) => setName(e.target.value)} value={name} />
                         </label>
                         <label className='flex flex-col'>
                             University
@@ -82,7 +81,7 @@ function CreateLORModal({ isModal }) {
                         </label>
                         <label className='flex flex-col'>
                             Program
-                            <input type="text" name="program" className='p-2 border rounded-lg' onChange={(e) => setProgram(e.target.value)} />
+                            <input type="text" name="program" className='p-2 border rounded-lg' onChange={(e) => setProgram(e.target.value)} value={program} />
                         </label>
                         <button type="submit" className='p-2 bg-blue-600 text-white rounded-lg my-3 cursor-pointer'
                             onClick={handleRequestSubmit}

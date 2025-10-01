@@ -12,8 +12,9 @@ import { ToastContainer, toast, Bounce } from 'react-toastify';
 function Dashboard() {
 
   const [modal, setModal] = useState(false)
+  const [loading, setLoading] = useState(false)
 
-  const { user, updateUser } = userStore()
+  const { user, updateUser, getLor, LORData } = userStore()
   const { connectAsync } = useConnect()
 
   const { disconnect } = useDisconnect()
@@ -51,6 +52,20 @@ function Dashboard() {
   }, [isConnected, address])
 
 
+  // useEffect(() => {
+
+
+
+  // }, [user, lorLoading])
+
+  async function fetchLOR() {
+    if (user) {
+      setLoading(true)
+      const res = await getLor()
+      console.log(res.data.lorRequests)
+      setLoading(false)
+    }
+  }
 
 
   return (
@@ -87,7 +102,29 @@ function Dashboard() {
           {/* <button onClick={handleuserUpdate}>updateuser</button> */}
         </div>
         <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={() => setModal(true)}>Create New Request</button>
+        <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={fetchLOR}>Fetch LOR</button>
+        <div className='w-full flex items-center justify-center mx-auto'>
+          {loading && <p className='text-black text-2xl'>Loading...</p>}
+          {/* {LORData && !loading ? <p className='text-black text-2xl'>{LORData.length} LORs found</p> : <p className='text-black text-2xl'>Somthing went wrong!</p>} */}
+          <table className='lortable'>
+            <tr className='w-full text-left border-y-[1px] border-y-black'>
+              <th>RequestID</th>
+              <th>Name</th>
+              <th>Program</th>
+              <th>University</th>
+              <th>Address</th>
+              <th></th>
+            </tr>
+
+            <tbody>
+              <tr>
+
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
+
     </>
   )
 }

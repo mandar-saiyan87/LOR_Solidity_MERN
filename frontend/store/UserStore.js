@@ -10,11 +10,12 @@ const userStore = create((set) => ({
     user: null,
     loading: false,
     error: null,
+    LORData: null,
 
     login: async (email, password, role) => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/login`, { email, password, role })
+            const response = await axios.post('/api/auth/login', { email, password, role })
             if (response.status === 200) {
                 set({ user: response.data.userdetails, error: null })
                 return response
@@ -29,7 +30,7 @@ const userStore = create((set) => ({
     logout: async () => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/logout`)
+            const response = await axios.post('/api/auth/logout')
             if (response.status === 200) {
                 set({ user: null, error: null })
                 return response
@@ -44,7 +45,7 @@ const userStore = create((set) => ({
     fetchUser: async () => {
         set({ loading: true, error: null })
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/profile`)
+            const response = await axios.post('/api/auth/profile')
             if (response.status === 200) {
                 set({ user: response.data.userdetails, error: null })
                 return response
@@ -62,7 +63,7 @@ const userStore = create((set) => ({
         set({ loading: true, error: null })
         try {
 
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/students/register`, { username, email, password, role: "Student", authType: "email" })
+            const response = await axios.post('/api/students/register', { username, email, password, role: "Student", authType: "email" })
             if (response.status === 200) {
                 set({ user: response.data.studentdetails, error: null })
                 return response
@@ -80,7 +81,7 @@ const userStore = create((set) => ({
         // set({ loading: true, error: null })
         set({ error: null })
         try {
-            const response = await axios.post(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/auth/walletlogin`, { walletaddress, email, role: "Student", authType: "email" })
+            const response = await axios.post('/api/auth/walletlogin', { walletaddress, email, role: "Student", authType: "email" })
             if (response.status === 200) {
                 set({ user: response.data.userDetails, error: null })
                 return response
@@ -90,13 +91,13 @@ const userStore = create((set) => ({
             set({ error: error.response?.data?.message || "Login Failed" })
             return error.response
         }
-        
+
     },
 
     updateUser: async (userdetails) => {
         // set({ loading: true, error: null })
         try {
-            const response = await axios.patch(`${process.env.NEXT_PUBLIC_BACKEND_URL}/api/user/updatedetails`, userdetails)
+            const response = await axios.patch('/api/user/updatedetails', userdetails)
             if (response.status === 200) {
                 set({ user: response.data.userdetails, error: null })
                 return response
@@ -108,6 +109,18 @@ const userStore = create((set) => ({
         // finally {
         //     set({ loading: false })
         // }
+    },
+    getLor: async () => {
+        try {
+            const response = await axios.get('/api/lor/getlor')
+            if (response.status === 200) {
+                set({ LORData: response.data.lorRequests, error: null })
+                return response
+            }
+        } catch (error) {
+            set({ error: error.response?.data?.message || "LOR Fetching Failed" })
+            return error.response
+        }
     }
 
 }))

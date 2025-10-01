@@ -16,3 +16,13 @@ body {
   margin: auto !important;
   }
 }
+
+@layer components {
+  .lortable {
+    @apply w-full my-5;
+  }
+  .lortable th {
+    @apply px-6 py-3 text-left text-sm font-medium text-gray-800 uppercase tracking-wider;
+  }
+
+}
