@@ -10,19 +10,28 @@ body {
 
   }
 
-  [data-rk][role="dialog"][aria-modal="true"] {
+  [data-rk] .iekbcc0 {
+    @apply w-auto h-auto
+  }
+
+
+  /* [data-rk][role="dialog"][aria-modal="true"] {
       width: 100% !important;
   max-width: none !important;
   margin: auto !important;
-  }
+  } */
 }
 
 @layer components {
   .lortable {
-    @apply w-full my-5;
+    @apply w-full my-5 mx-auto;
   }
   .lortable th {
-    @apply px-6 py-3 text-left text-sm font-medium text-gray-800 uppercase tracking-wider;
+    @apply px-8 py-4 text-left text-sm font-medium text-gray-800 uppercase tracking-wider;
+  }
+
+  .lortable td {
+    @apply px-8 py-4 text-left text-sm text-black flex-wrap cursor-pointer;
   }
 
 }

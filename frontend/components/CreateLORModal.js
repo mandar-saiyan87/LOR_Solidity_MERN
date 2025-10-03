@@ -4,13 +4,14 @@ import { useAccount } from "wagmi";
 import { generateRandomId } from '@/app/utils/randomLORId';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import { useLORCreate } from '@/app/hooks/useLORCreate';
+import { userStore } from '@/store/UserStore';
 
 
 function CreateLORModal({ isModal }) {
 
+    const { getLor } = userStore()
 
-
-    const { address, isConnected } = useAccount();
+    const { address } = useAccount();
 
     const { createLOR, txHash, isPending, isConfirming, isSuccess, error } = useLORCreate()
 
@@ -40,6 +41,7 @@ function CreateLORModal({ isModal }) {
         if (isSuccess && txHash) {
             setName('')
             setProgram('')
+            getLor()
         }
     }, [isSuccess, txHash])
 

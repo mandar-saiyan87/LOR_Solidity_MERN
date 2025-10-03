@@ -7,6 +7,7 @@ import { ScaleLoader } from "react-spinners"
 
 
 
+
 export default function Home() {
 
   // const router = useRouter()
