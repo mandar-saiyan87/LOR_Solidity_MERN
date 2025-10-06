@@ -17,6 +17,8 @@ function Dashboard() {
   const { user, updateUser, getLor, LORData } = userStore()
   const { connectAsync } = useConnect()
 
+  console.log(user)
+
   const { disconnect } = useDisconnect()
 
   const { address, isConnected } = useAccount();
@@ -26,11 +28,21 @@ function Dashboard() {
   }
 
 
+  async function approverConnect() {
+    const connections = await connectAsync({ connector: injected() })
+    // // console.log(connections)
+    if (connections.accounts[0] !== user.walletaddress) {
+      toast.error('Can connect only to assigned wallet')
+      disconnect()
+    }
+  }
+
+
 
   useEffect(() => {
     async function handleuserAddressUpdate() {
 
-      if (isConnected) {
+      if (isConnected && (user.role !== 'Admin' || user.role !== 'Approver')) {
         if (!user.walletaddress.includes(address)) {
           // console.log("Address Included")
           // return
@@ -94,18 +106,43 @@ function Dashboard() {
       <div className='w-full min-h-screen flex flex-col'>
 
         <div className='w-full flex flex-col gap-3 mt-3 lg:flex-row '>
-          {
-            isConnected ? <>
+          {user.role === 'Admin' || user.role === 'Approver' && <div className='max-w-max flex gap-x-3'>
+            <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
+              <p>{user.walletaddress}</p>
+            </div>
+            {!isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={approverConnect}>Connect Wallet</button> :
+              <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
+            }
+          </div>
+          }
+
+          {user.role === 'Student' && <>
+            {!isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={handleWalletConnect}>Connect Wallet</button> :
+              <div className="max-w-max flex items-center justify-center gap-x-3">
+                <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
+                  <p>{address}</p>
+                </div>
+                <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
+              </div>
+            }  
+          </>}
+
+          {/* </> */}
+          {/* 
+          {user.role === 'Student' && !isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={handleWalletConnect}>Connect Wallet</button> :
+            <>
               <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
                 <p>{address}</p>
               </div>
               <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
-            </> : <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={handleWalletConnect}>Connect Wallet</button>
-          }
+            </>} */}
+          {/* </> */}
 
-          {/* <button onClick={handleuserUpdate}>updateuser</button> */}
         </div>
-        <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={() => setModal(true)}>Create New Request</button>
+        {
+          user.role === 'Student' && <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={() => setModal(true)}>Create New Request</button>
+        }
+
         {/* <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={fetchLOR}>Fetch LOR</button> */}
         <div className='w-full flex items-center justify-center mx-auto my-5'>
           {loading ? <p className='text-black text-lg'>Loading...</p> : LORData && !loading ?
@@ -122,20 +159,23 @@ function Dashboard() {
 
                   </tr>
                 </thead>
-                <tbody className='w-full text-left border-y-[1px] border-y-black'>
-                  {LORData?.map((item) => {
-                    return (
-                      <tr className='w-full text-left border-y-[1px] border-y-black' key={item.requestId}>
-                        <td>{item.requestId}</td>
-                        <td>{item.fullname}</td>
-                        <td>{item.program}</td>
-                        <td>{item.university}</td>
-                        <td>{item.studentAddress}</td>
-                        <td>{item.status}</td>
-                      </tr>)
-                  })}
+                {LORData.length === 0 ? <p className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</p> :
+                  <tbody className='w-full text-left border-y-[1px] border-y-black'>
+                    {LORData?.map((item) => {
+                      return (
+                        <tr className='w-full text-left border-y-[1px] border-y-black' key={item.requestId}>
+                          <td>{item.requestId}</td>
+                          <td>{item.fullname}</td>
+                          <td>{item.program}</td>
+                          <td>{item.university}</td>
+                          <td>{item.studentAddress}</td>
+                          <td>{item.status}</td>
+                        </tr>)
+                    })}
 
-                </tbody>
+                  </tbody>
+                }
+
               </table>
               {LORData?.map((item) => {
                 return (

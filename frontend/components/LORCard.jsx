@@ -30,7 +30,7 @@ function LORCard({ lor }) {
                     <p className='font-semibold break-words my-2'>Program: <span className='font-normal'>{lor.program}</span></p>
                     <p className='font-semibold break-words my-2'>University: <span className='font-normal'>{lor.university}</span></p>
                     <p className='font-semibold break-words my-2'>Student Address: <span className='font-normal'>{lor.studentAddress}</span></p>
-                    <p className='font-semibold break-words my-2'>Requester: <span className='font-normal'>{lor.requesterAddress}</span></p>
+                    <p className='font-semibold break-words my-2'>Status: <span className='font-normal'>{lor.status}</span></p>
                 </div>
             }
         </div>
