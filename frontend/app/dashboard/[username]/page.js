@@ -17,8 +17,6 @@ function Dashboard() {
   const { user, updateUser, getLor, LORData } = userStore()
   const { connectAsync } = useConnect()
 
-  console.log(user)
-
   const { disconnect } = useDisconnect()
 
   const { address, isConnected } = useAccount();
@@ -116,6 +114,8 @@ function Dashboard() {
           </div>
           }
 
+          {/* </> */}
+
           {user.role === 'Student' && <>
             {!isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={handleWalletConnect}>Connect Wallet</button> :
               <div className="max-w-max flex items-center justify-center gap-x-3">
@@ -124,28 +124,20 @@ function Dashboard() {
                 </div>
                 <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
               </div>
-            }  
+            }
           </>}
-
-          {/* </> */}
-          {/* 
-          {user.role === 'Student' && !isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={handleWalletConnect}>Connect Wallet</button> :
-            <>
-              <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
-                <p>{address}</p>
-              </div>
-              <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
-            </>} */}
-          {/* </> */}
-
         </div>
+
+        {/* </> */}
+
         {
           user.role === 'Student' && <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={() => setModal(true)}>Create New Request</button>
         }
 
-        {/* <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600 my-3' onClick={fetchLOR}>Fetch LOR</button> */}
+        {/* </> */}
+
         <div className='w-full flex items-center justify-center mx-auto my-5'>
-          {loading ? <p className='text-black text-lg'>Loading...</p> : LORData && !loading ?
+          {loading ? <div className='text-black text-lg'>Loading...</div> : LORData && !loading ?
             <div className='w-full mx-auto'>
               <table className='lortable hidden lg:block'>
                 <thead>
@@ -159,7 +151,7 @@ function Dashboard() {
 
                   </tr>
                 </thead>
-                {LORData.length === 0 ? <p className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</p> :
+                {LORData.length === 0 ? <div className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</div> :
                   <tbody className='w-full text-left border-y-[1px] border-y-black'>
                     {LORData?.map((item) => {
                       return (
