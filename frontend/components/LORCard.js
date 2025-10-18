@@ -37,7 +37,7 @@ function LORCard({ lor, user, approvestate, rejectState, handlestatusops }) {
                     <p className='font-semibold break-words my-2'>Program: <span className='font-normal'>{lor.program}</span></p>
                     <p className='font-semibold break-words my-2'>University: <span className='font-normal'>{lor.university}</span></p>
                     <p className='font-semibold break-words my-2'>Student Address: <span className='font-normal'>{lor.studentAddress}</span></p>
-                    <p className='font-semibold break-words my-2'>Status: <span className='font-normal'>{lor.status}</span></p>
+                        <p className='font-semibold break-words my-2'>Status: <span className={`${lor.status === 'PENDING' ? 'text-yellow-600' : lor.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'} font-normal`}>{lor.status}</span></p>
                     {
 
                         (user.role === 'Admin' || user.role === 'Approver') &&

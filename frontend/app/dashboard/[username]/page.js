@@ -219,7 +219,7 @@ function Dashboard() {
                           <td>{item.program}</td>
                           <td>{item.university}</td>
                           <td>{item.studentAddress}</td>
-                          <td>{item.status}</td>
+                          <td className={item.status === 'PENDING' ? 'text-yellow-600' : item.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'}>{item.status}</td>
                           {
 
                             (user.role === 'Admin' || user.role === 'Approver') &&
