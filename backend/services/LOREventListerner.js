@@ -6,6 +6,7 @@ export function LOREventListerner() {
 
     console.log("📡 Starting LOR event listener.....");
 
+    // Add new LOR Request
     contract.on("LORRequested", async (requestId, student, event) => {
         // console.log('requestId: ', requestId),
         //     console.log('Student: ', student),
@@ -33,5 +34,49 @@ export function LOREventListerner() {
         // console.log(requestData)
         const newRequest = new LORRequest(requestData)
         await newRequest.save()
+    })
+
+    // Update LOR request
+    contract.on('LORApproved', async (requestId, approver, student, event) => {
+        // console.log('requestId: ', requestId),
+        //     console.log('Approver: ', approver),
+        //     console.log('Student: ', student),
+        //     console.log('TxHash:', event.log.transactionHash)
+        const lorRequest = await contract.getLORRequest(requestId)
+
+        // const updateLOR = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
+
+        const requestData = {
+            status: lorRequest.isApproved ? "APPROVED" : lorRequest.isRejected && "REJECTED",
+            updatedtxHash: event.log.transactionHash,
+            updatedblockNumber: event.log.blockNumber,
+            approverAddress: lorRequest.approver,
+            approvedAt: lorRequest.isApproved ? new Date().toISOString() : null,
+            rejectedAt: lorRequest.isRejected ? new Date().toISOString() : null
+        }
+
+        await LORRequest.updateOne({ requestId: lorRequest.requestId.toString() }, { $set: requestData })
+    })
+
+
+    contract.on('LORRejected', async (requestId, approver, student, event) => {
+        console.log('requestId: ', requestId),
+            console.log('Approver: ', approver),
+            console.log('Student: ', student),
+            console.log('TxHash:', event.log.transactionHash)
+        const lorRequest = await contract.getLORRequest(requestId)
+
+        // const updateLOR = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
+
+        const requestData = {
+            status: lorRequest.isApproved ? "APPROVED" : lorRequest.isRejected && "REJECTED",
+            updatedtxHash: event.log.transactionHash,
+            updatedblockNumber: event.log.blockNumber,
+            approverAddress: lorRequest.approver,
+            approvedAt: lorRequest.isApproved ? new Date().toISOString() : null,
+            rejectedAt: lorRequest.isRejected ? new Date().toISOString() : null
+        }
+
+        await LORRequest.updateOne({ requestId: lorRequest.requestId.toString() }, { $set: requestData })
     })
 }

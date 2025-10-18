@@ -53,8 +53,14 @@ const LORSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    updatedtxHash: {
+        type: String
+    },
 
     blockNumber: {
+        type: Number
+    },
+    updatedblockNumber: {
         type: Number
     },
 

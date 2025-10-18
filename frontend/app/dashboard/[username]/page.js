@@ -7,25 +7,41 @@ import { injected } from "wagmi/connectors";
 import CreateLORModal from '@/components/CreateLORModal';
 import { ToastContainer, toast, Bounce } from 'react-toastify';
 import LORCard from '@/components/LORCard';
+import { useLORApprove, useLORReject } from '@/app/hooks/useLORHooks';
+import LORStatusModal from '@/components/LORStatusModal';
+
 
 
 function Dashboard() {
 
   const [modal, setModal] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [lorId, setLorId] = useState('')
 
+  // LOR status MOdal - Approved or Rejected
+  const [statusModal, setStatusModal] = useState(false)
+
+  // Set & use Tx data
+  const [txData, setTxData] = useState(null)
+
+  // Userstore Data
   const { user, updateUser, getLor, LORData } = userStore()
   const { connectAsync } = useConnect()
+
+  // LOR Approve or Reject hook - Operations performed using blockchain function calls using Wagmi connection
+  const { approveLOR, txHash, isPending, isConfirming, isSuccess, error } = useLORApprove()
+  const { rejectLOR, txHash: rejectTxHash, isPending: rejectPending, isConfirming: rejectConfirm, isSuccess: rejectSuccess, error: rejectError } = useLORReject()
 
   const { disconnect } = useDisconnect()
 
   const { address, isConnected } = useAccount();
 
+  // Connect to wallet - Student
   async function handleWalletConnect() {
     const connections = await connectAsync({ connector: injected() })
   }
 
-
+  // Connect to wallet - Approver / Admin
   async function approverConnect() {
     const connections = await connectAsync({ connector: injected() })
     // // console.log(connections)
@@ -35,8 +51,26 @@ function Dashboard() {
     }
   }
 
+  // Close Modal reset states
+  function closeModal() {
+    setLorId('')
+    setTxData(null)
+    setStatusModal(false)
+  }
 
 
+  // To handle approve and reject LOR by calling contract hooks
+  function handleLORStatus(lorid, operation) {
+    setLorId(lorid)
+    if (operation === 'approve') {
+      approveLOR(lorid)
+    } else if (operation === 'reject') {
+      rejectLOR(lorid)
+    }
+  }
+
+
+  // Handle new address if used by student to connect
   useEffect(() => {
     async function handleuserAddressUpdate() {
 
@@ -62,6 +96,7 @@ function Dashboard() {
   }, [isConnected, address])
 
 
+  // Fetch LOR Data
   useEffect(() => {
 
     async function fetchLOR() {
@@ -78,7 +113,26 @@ function Dashboard() {
   }, [user])
 
 
+  // Show updated status modal depends on txHash
+  useEffect(() => {
+    if (txHash && isSuccess) {
+      setTxData({ type: 'Approve', txHash })
+      setStatusModal(true)
+      getLor()
+    }
+    else if (rejectTxHash && rejectSuccess) {
+      setTxData({ type: 'Reject', txHash: rejectTxHash })
+      setStatusModal(true)
+      getLor()
+    }
+    else if (error || rejectError) {
+      // console.log(error.message || rejectError.message)
 
+      setTxData({ type: 'error', txHash: txHash || rejectTxHash, error: error || rejectError })
+      setStatusModal(true)
+      getLor()
+    }
+  }, [txHash, isSuccess, rejectTxHash, rejectSuccess, error, rejectError])
 
   return (
     <>
@@ -101,10 +155,14 @@ function Dashboard() {
         modal && <CreateLORModal isModal={setModal} />
       }
 
+      {
+        statusModal && <LORStatusModal setModal={closeModal} txData={txData} lorid={lorId} />
+      }
+
       <div className='w-full min-h-screen flex flex-col'>
 
         <div className='w-full flex flex-col gap-3 mt-3 lg:flex-row '>
-          {user.role === 'Admin' || user.role === 'Approver' && <div className='max-w-max flex gap-x-3'>
+          {user.role === 'Admin' || user.role === 'Approver' && <div className='max-w-max flex flex-col gap-3 lg:flex-row'>
             <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
               <p>{user.walletaddress}</p>
             </div>
@@ -148,7 +206,7 @@ function Dashboard() {
                     <th>University</th>
                     <th>Address</th>
                     <th>Status</th>
-
+                    {/* {user.role === 'Admin' || user.role === 'Approver' && <th>Actions</th>} */}
                   </tr>
                 </thead>
                 {LORData.length === 0 ? <div className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</div> :
@@ -162,6 +220,22 @@ function Dashboard() {
                           <td>{item.university}</td>
                           <td>{item.studentAddress}</td>
                           <td>{item.status}</td>
+                          {
+
+                            (user.role === 'Admin' || user.role === 'Approver') &&
+                            <td>
+                              {item.status === 'PENDING' && <div className='flex gap-x-3'>
+                                <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-green-600' onClick={() => handleLORStatus(item.requestId, 'approve')}>
+                                  {isPending && item.requestId === lorId ? 'Signing...' : isConfirming && item.requestId === lorId ? 'Confirming...' : 'Approve'}
+                                </button>
+                                <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-red-600' onClick={() => handleLORStatus(item.requestId, 'reject')}>
+                                  {rejectPending && item.requestId === lorId ? 'Signing...' : rejectConfirm && item.requestId === lorId ? 'Confirming...' : 'Reject'}
+                                </button>
+                              </div>
+                              }
+                            </td>
+                          }
+
                         </tr>)
                     })}
 
@@ -171,7 +245,14 @@ function Dashboard() {
               </table>
               {LORData?.map((item) => {
                 return (
-                  <LORCard key={item.requestId} lor={item} />
+                  <LORCard key={item.requestId}
+                    lor={item}
+                    user={user}
+                    approvestate={{ isPending, isConfirming }}
+                    rejectState={{ rejectPending, rejectConfirm }}
+                    handlestatusops={handleLORStatus}
+
+                  />
                 )
               })}
             </div> : <p className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</p>

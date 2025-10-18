@@ -1,8 +1,15 @@
+"use client"
 import React, { useState } from 'react'
+import { useLORApprove, useLORReject } from "@/app/hooks/useLORHooks"
 
-function LORCard({ lor }) {
+
+function LORCard({ lor, user, approvestate, rejectState, handlestatusops }) {
 
     const [open, setOpen] = useState(false)
+
+    const { isPending, isConfirming } = approvestate
+    const { rejectPending, rejectConfirm } = rejectState
+
 
     return (
         <div className='w-full bg-gray-200 my-3 px-4 py-3 rounded-lg lg:hidden'>
@@ -31,6 +38,21 @@ function LORCard({ lor }) {
                     <p className='font-semibold break-words my-2'>University: <span className='font-normal'>{lor.university}</span></p>
                     <p className='font-semibold break-words my-2'>Student Address: <span className='font-normal'>{lor.studentAddress}</span></p>
                     <p className='font-semibold break-words my-2'>Status: <span className='font-normal'>{lor.status}</span></p>
+                    {
+
+                        (user.role === 'Admin' || user.role === 'Approver') &&
+                        <>
+                            {lor.status === 'PENDING' && <div className='flex gap-x-3'>
+                                <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-green-600' onClick={() => handlestatusops(item.requestId, 'approve')}>
+                                    {isPending ? 'Signing...' : isConfirming ? 'Confirming...' : 'Approve'}
+                                </button>
+                                <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-red-600' onClick={() => handlestatusops(item.requestId, 'reject')}>
+                                    {rejectPending ? 'Signing...' : rejectConfirm ? 'Confirming...' : 'Reject'}
+                                </button>
+                            </div>
+                            }
+                        </>
+                    }
                 </div>
             }
         </div>

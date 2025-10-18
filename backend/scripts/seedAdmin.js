@@ -1,30 +1,12 @@
-import dotenv from "dotenv"
 import Admin from "../models/Users/Admin.js"
-import mongoose from "mongoose"
 import bcrypt from "bcrypt"
 import { isvalidWalletAddress } from "../utils/verifyPublicAddress.js"
+import { connectDB } from "./dbConnection.js"
 
 // To get user input (specially to get non text visiible password)
 import readlineSync from "readline-sync"
 
 
-dotenv.config()
-
-const { MONGODB_URI } = process.env
-
-// Connect to DB
-const connectDB = async () => {
-    try {
-        const connection = await mongoose.connect(MONGODB_URI)
-        if (connection) {
-            console.log('Database Connected')
-            return true
-        }
-    } catch (error) {
-        console.log(error)
-        return false
-    }
-}
 
 // Function to seed admin in database
 const seedAdmin = async () => {
