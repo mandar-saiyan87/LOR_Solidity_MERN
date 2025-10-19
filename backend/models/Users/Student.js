@@ -29,6 +29,11 @@ const studentSchema = new mongoose.Schema({
 
 
     },
+    gender: {
+        type: String,
+        required: true,
+        enum: ["Male", "Female", "Other"]
+    },
     walletaddress: {
         type: [String],
         unique: true

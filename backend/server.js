@@ -11,7 +11,6 @@ import lorrouter from "./routes/lorRoutes.js"
 
 
 
-
 connectDB()
 const app = express()
 const port = 5000
@@ -25,7 +24,10 @@ app.use(cors({
     ],
     credentials: true
 }))
+
 app.use(express.json())
+app.set('view engine', 'ejs')
+app.set("views", path.join(process.cwd(), "lortemplate"));
 
 
 app.use("/api/students", studentrouter)
