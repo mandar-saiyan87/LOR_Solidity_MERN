@@ -1,6 +1,6 @@
 import express from "express";
 import { verifyToken } from "../middleware/verifyToken.js";
-import { GetLORbyUserController } from "../controllers/lorController.js";
+import { GetLORbyUserController, GenerateLORLetter } from "../controllers/lorController.js";
 
 const lorrouter = express.Router();
 
@@ -9,5 +9,7 @@ lorrouter.get("/status", (req, res) => {
 });
 
 lorrouter.get("/getlor", verifyToken, GetLORbyUserController)
+
+lorrouter.post("/generateletter", verifyToken, GenerateLORLetter)
 
 export default lorrouter;

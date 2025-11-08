@@ -1,5 +1,17 @@
 {
     "typescript.tsserver.maxTsServerMemory": 1024,
     "editor.wordWrap": "wordWrapColumn",
-    "editor.wordWrapColumn": 165
+    "editor.wordWrapColumn": 165,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.next": true, // Next.js build folder
+        "**/node_modules": true,
+        "**/dist": true,
+        "**/build": true
+    },
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.next": true,
+        "**/dist": true
+    }
 }

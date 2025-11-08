@@ -4,58 +4,61 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
         <title>Document</title>
     </head>
 
-    <body>
-        <h2>LETTER OF RECOMMENDATION</h2>
-        <p>To Whom It May Concern,</p>
-        <p>
-            It is my pleasure to recommend <%= studentName %> for further academic or professional pursuits.
-                During the <%= courseName %> program at our university, <%= studentName %> has consistently demonstrated
+    <body class="flex flex-col py-7 px-12">
+        <h2 class='text-center mb-12 font-bold'>LETTER OF RECOMMENDATION</h2>
+        <p class='mb-8'>To Whom It May Concern,</p>
+        <p class='mb-8'>
+            It is my pleasure to recommend <span class='font-bold'><%= templateData.studentName %></span> for further academic or professional pursuits.
+                During the <span class='font-bold'><%= templateData.courseName %></span> program at our university, <span class='font-bold'><%= templateData.studentName %></span> has consistently demonstrated
                 exceptional dedication, curiosity, and an eagerness to learn.
         </p>
-        <p>
-            Throughout the duration of the course, <%= studentName %> showcased a deep understanding of the subject matter,
+        <p class='mb-8'>
+            Throughout the duration of the course, <span class='font-bold'><%= templateData.studentName %></span> showcased a deep understanding of the subject matter,
             strong analytical ability, and the capability to apply theoretical knowledge to practical problems.
-            <%= studentName %> has also displayed commendable teamwork, leadership, and communication skills,
-            making <%= studentName %> an asset to any academic or professional setting.
+            <span class='font-bold'><%= templateData.studentName %></span> has also displayed commendable teamwork, leadership, and communication skills,
+            making <span class='font-bold'><%= templateData.studentName %></span> an asset to any academic or professional setting.
         </p>
         <p>
-            Based on my observation and evaluation, I am confident that <%= studentName %> will continue to excel
+            Based on my observation and evaluation, We are confident that <span class='font-bold'><%= templateData.studentName %></span> will continue to excel
             in
-            <% if (gender === 'Male') {%>
+            <% if (templateData.gender === 'Male') {%>
                 <%= "his" %>
-            <% } else if (gender === 'Female') { %>
+            <% } else if (templateData.gender === 'Female') { %>
                 <%= "her" %>
-            <% } else if (gender === 'Other') { %>
+            <% } else if (templateData.gender === 'Other') { %>
                 <%= "their" %>
+            <% } else { %>
+                <%= "his/her" %>
             <% } %>    
             future endeavors and make valuable contributions wherever
-                     <% if (gender === 'Male') {%>
+                     <% if (templateData.gender === 'Male') {%>
                 <%= "he" %>
-            <% } else if (gender === 'Female') { %>
+            <% } else if (templateData.gender === 'Female') { %>
                 <%= "she" %>
-            <% } else if (gender === 'Other') { %>
+            <% } else if (templateData.gender === 'Other') { %>
                 <%= "they" %>
-            <% } %> 
-            
-            
+            <% } else { %>
+                <%= "he/she" %>
+            <% } %>  
              goes.
         </p>
 
-        <div class="signature">
-            <p>Sincerely,</p>
-            <p> <%= approverName %><br>
-                <%= approverDesignation %><br>
-                <%= universityName %><br>
-                Date: <%= approvalDate %></p>
+        <div class="my-8">
+            <p class='my-2'>Sincerely,</p>
+            <p class='flex flex-col gap-y-2 font-bold'> <%= templateData.approverName %><br>
+                <%= templateData.approverDesignation %><br>
+                <%= templateData.universityName %><br>
+                Date: <%= templateData.approvalDate %></p>
         </div>
 
-        <div class="verification">
-            <p>Verification:</p>
-            <p>Student Wallet: <%= studentWalletAddress %><br>
-                Approver Wallet: <%= approverWalletAddress %></p>
+        <div class="flex flex-col gap-y-2">
+            <p class='my-2'>Verification:</p>
+            <p class='font-bold'>Student Wallet: <%= templateData.studentWalletAddress %><br>
+                Approver Wallet: <%= templateData.approverWalletAddress %></p>
             <p>(This LOR is recorded and verifiable on the blockchain.)</p>
         </div>
     </body>

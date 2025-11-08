@@ -7,6 +7,7 @@ import authrouter from "./routes/authRoutes.js"
 import approverrouter from "./routes/approverRoutes.js"
 import userupdaterouter from "./routes/userUpdateRoute.js"
 import lorrouter from "./routes/lorRoutes.js"
+import path from 'path'
 
 
 
@@ -27,7 +28,7 @@ app.use(cors({
 
 app.use(express.json())
 app.set('view engine', 'ejs')
-app.set("views", path.join(process.cwd(), "lortemplate"));
+app.set("lortemplate", path.join(process.cwd(), "lortemplate"));
 
 
 app.use("/api/students", studentrouter)

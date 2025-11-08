@@ -121,6 +121,20 @@ const userStore = create((set) => ({
             set({ error: error.response?.data?.message || "LOR Fetching Failed" })
             return error.response
         }
+    },
+    generateLOR: async (lordata) => {
+        try {
+            const response = await axios.post('/api/lor/generateletter', lordata, {
+                responseType: 'blob'
+            })
+            if (response.status === 200) {
+                return response.data
+            }
+        } catch (error) {
+            set({ error: error.response?.data?.message || "LOR Fetching Failed" })
+            // console.log(error.response?.data?.message)
+            return error.response
+        }
     }
 
 }))

@@ -25,7 +25,7 @@ function Dashboard() {
   const [txData, setTxData] = useState(null)
 
   // Userstore Data
-  const { user, updateUser, getLor, LORData } = userStore()
+  const { user, updateUser, getLor, LORData, generateLOR } = userStore()
   const { connectAsync } = useConnect()
 
   // LOR Approve or Reject hook - Operations performed using blockchain function calls using Wagmi connection
@@ -67,6 +67,47 @@ function Dashboard() {
     } else if (operation === 'reject') {
       rejectLOR(lorid)
     }
+  }
+
+  // Generate LOR Letter
+  async function handleGenerateLOR(e, requestid) {
+    e.preventDefault()
+    if (!address) {
+      toast.error('Wallet not connected, Please connect wallet!');
+      return
+    }
+
+    const currentLor = LORData.find(lor => lor.requestId === requestid)
+
+    // Convert date
+    const dateString = currentLor.approvedAt
+    const dateObject = new Date(dateString);
+    const options = { year: 'numeric', month: 'short', day: '2-digit' }
+    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObject)
+
+
+    const lordata = {
+      studentName: currentLor.fullname,
+      gender: user?.gender,
+      courseName: currentLor.program,
+      approverName: 'University Admin',
+      approverDesignation: 'HOD',
+      universityName: currentLor.university,
+      approvalDate: formattedDate,
+      studentWalletAddress: currentLor.studentAddress,
+      approverWalletAddress: currentLor.approverAddress
+    }
+
+    const lorpdf = await generateLOR(lordata)
+    if (lorpdf.type === 'application/pdf') {
+      // console.log(lorpdf)
+      const fileurl = URL.createObjectURL(lorpdf)
+      window.open(fileurl, '_blank')
+    } else {
+      console.error(lorpdf);
+      toast.error('Failed to generate LOR letter. Contact support.');
+    }
+
   }
 
 
@@ -196,8 +237,8 @@ function Dashboard() {
 
         <div className='w-full flex items-center justify-center mx-auto my-5'>
           {loading ? <div className='text-black text-lg'>Loading...</div> : LORData && !loading ?
-            <div className='w-full mx-auto'>
-              <table className='lortable hidden lg:block'>
+            <div className='w-full max-w-[1536px] mx-auto'>
+              <table className='lortable hidden lg:flex'>
                 <thead>
                   <tr className='w-full text-left border-y-[1px] border-y-black'>
                     <th>RequestID</th>
@@ -220,6 +261,11 @@ function Dashboard() {
                           <td>{item.university}</td>
                           <td>{item.studentAddress}</td>
                           <td className={item.status === 'PENDING' ? 'text-yellow-600' : item.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'}>{item.status}</td>
+                          {
+                            item.status === 'APPROVED' && <td>
+                              <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={(e) => handleGenerateLOR(e, item.requestId)}>Generate LOR Letter</button>
+                            </td>
+                          }
                           {
 
                             (user.role === 'Admin' || user.role === 'Approver') &&

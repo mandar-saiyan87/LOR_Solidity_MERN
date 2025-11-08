@@ -37,7 +37,12 @@ function LORCard({ lor, user, approvestate, rejectState, handlestatusops }) {
                     <p className='font-semibold break-words my-2'>Program: <span className='font-normal'>{lor.program}</span></p>
                     <p className='font-semibold break-words my-2'>University: <span className='font-normal'>{lor.university}</span></p>
                     <p className='font-semibold break-words my-2'>Student Address: <span className='font-normal'>{lor.studentAddress}</span></p>
-                        <p className='font-semibold break-words my-2'>Status: <span className={`${lor.status === 'PENDING' ? 'text-yellow-600' : lor.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'} font-normal`}>{lor.status}</span></p>
+                    <p className='font-semibold break-words my-2'>Status: <span className={`${lor.status === 'PENDING' ? 'text-yellow-600' : lor.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'} font-normal`}>{lor.status}</span></p>
+                    {
+                        lor.status === 'APPROVED' &&
+                        <button className='text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={() => handleGenerateLOR(lor.requestId)}>Generate LOR Letter</button>
+
+                    }
                     {
 
                         (user.role === 'Admin' || user.role === 'Approver') &&

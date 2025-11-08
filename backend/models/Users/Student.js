@@ -27,7 +27,6 @@ const studentSchema = new mongoose.Schema({
         },
         select: false,
 
-
     },
     gender: {
         type: String,
