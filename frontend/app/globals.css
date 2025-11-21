@@ -24,14 +24,14 @@ body {
 
 @layer components {
   .lortable {
-    @apply w-full my-5 mx-auto;
+    @apply hidden md:block w-full my-5 mx-auto;
   }
   .lortable th {
-    @apply px-8 py-4 text-left text-sm font-medium text-gray-800 uppercase tracking-wider;
+    @apply px-5 py-4 text-left text-sm font-medium text-gray-800 uppercase tracking-wider whitespace-normal break-words;
   }
 
   .lortable td {
-    @apply flex px-8 py-4 text-left text-sm text-black text-wrap;
+    @apply px-5 py-4 text-left text-sm text-black whitespace-normal break-words;
   }
 
 }

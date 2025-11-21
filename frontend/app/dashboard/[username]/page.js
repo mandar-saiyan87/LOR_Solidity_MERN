@@ -238,7 +238,7 @@ function Dashboard() {
         <div className='w-full flex items-center justify-center mx-auto my-5'>
           {loading ? <div className='text-black text-lg'>Loading...</div> : LORData && !loading ?
             <div className='w-full max-w-[1536px] mx-auto'>
-              <table className='lortable hidden lg:flex'>
+              <table className='lortable table-fixed'>
                 <thead>
                   <tr className='w-full text-left border-y-[1px] border-y-black'>
                     <th>RequestID</th>
@@ -251,7 +251,7 @@ function Dashboard() {
                   </tr>
                 </thead>
                 {LORData.length === 0 ? <div className='text-black text-lg my-3'>No LOR to fetch, Please check later or contact support</div> :
-                  <tbody className='w-full text-left border-y-[1px] border-y-black'>
+                  <tbody className='text-left border-y-[1px] border-y-black'>
                     {LORData?.map((item) => {
                       return (
                         <tr className='w-full text-left border-y-[1px] border-y-black' key={item.requestId}>
@@ -259,7 +259,7 @@ function Dashboard() {
                           <td>{item.fullname}</td>
                           <td>{item.program}</td>
                           <td>{item.university}</td>
-                          <td>{item.studentAddress}</td>
+                          <td className='md:max-w-[150px] lg:max-w-none'>{item.studentAddress}</td>
                           <td className={item.status === 'PENDING' ? 'text-yellow-600' : item.status === 'APPROVED' ? 'text-green-600' : 'text-red-600'}>{item.status}</td>
                           {
                             item.status === 'APPROVED' && <td>

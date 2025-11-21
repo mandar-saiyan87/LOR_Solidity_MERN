@@ -12,7 +12,7 @@ function LORCard({ lor, user, approvestate, rejectState, handlestatusops }) {
 
 
     return (
-        <div className='w-full bg-gray-200 my-3 px-4 py-3 rounded-lg lg:hidden'>
+        <div className='w-full bg-gray-200 my-3 px-4 py-3 rounded-lg md:hidden'>
             <div className='flex items-center justify-between'>
                 <p>{lor.requestId}</p>
                 {
