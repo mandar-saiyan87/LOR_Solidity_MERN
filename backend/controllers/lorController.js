@@ -23,6 +23,7 @@ export async function GetLORbyUserController(req, res) {
 export async function GenerateLORLetter(req, res) {
     try {
 
+
         const templateData = req.body
         // console.log(templateData)
 

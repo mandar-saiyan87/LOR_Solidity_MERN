@@ -12,7 +12,9 @@
         <h2 class='text-center mb-12 font-bold'>LETTER OF RECOMMENDATION</h2>
         <p class='mb-8'>To Whom It May Concern,</p>
         <p class='mb-8'>
-            It is my pleasure to recommend <span class='font-bold'><%= templateData.studentName %></span> for further academic or professional pursuits.
+            It is our pleasure to recommend <span class='font-bold'>
+                <%= templateData.studentName %>
+            </span> for further academic or professional pursuits.
                 During the <span class='font-bold'><%= templateData.courseName %></span> program at our university, <span class='font-bold'><%= templateData.studentName %></span> has consistently demonstrated
                 exceptional dedication, curiosity, and an eagerness to learn.
         </p>
@@ -23,7 +25,10 @@
             making <span class='font-bold'><%= templateData.studentName %></span> an asset to any academic or professional setting.
         </p>
         <p>
-            Based on my observation and evaluation, We are confident that <span class='font-bold'><%= templateData.studentName %></span> will continue to excel
+            Based on our observation and evaluation, We are confident that <span
+                class='font-bold'>
+                <%= templateData.studentName %>
+            </span> will continue to excel
             in
             <% if (templateData.gender === 'Male') {%>
                 <%= "his" %>
