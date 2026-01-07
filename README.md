@@ -10,7 +10,7 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
 - **Solidity** – Smart contract for LOR request & approval
 - **Hardhat** – Development, testing, and deployment environment
 - **Ethers.js** – Interacting with smart contracts
-- **Sepolia Testnet** – Deployed contract: `0x2228E6e0D43246684A1a193d5a0303A5B2C4d980`
+- **Sepolia Testnet** – Deployed contract: `0x039BAA8aD060f61F792f7F13d323bBaFbE267Bce`
 
 ### 🌐 Frontend *(Work in Progress)*
 - **React.js** / **Next.js** – Frontend with Web3 integration
