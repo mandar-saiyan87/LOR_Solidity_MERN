@@ -42,12 +42,36 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
 - Unit testing using Hardhat
 - Deployment on Sepolia
 - Repository initialized on GitHub
+- LOR Request Management:
+  - Create request  
+  - Approve request (by Admin/Approver)  
+  - Reject request (by Admin/Approver)
+- Event Listeners: Syncing the MongoDB database with blockchain events (e.g., `LORApproved / LORREject etc`).
+- Request/Create LOR letter and download
 
 ### 🚧 In Progress
 - Frontend UI in React/Next.js
-- Backend REST API (request management, listen to smart contract events)
-- Integration with IPFS and blockchain
-- Web3 wallet connection & transaction handling
+- Integration with IPFS (Pinata):
+  - Upload / save Generated LOR document to Pinata storage 
+  - Storing IPFS hash  
+  - Allowing users to download LOR anytime  
+- Refining transaction states and UI feedback during minting/approval.
+
+## ⚙️ System Design & Limitations
+
+To ensure the integrity of the recommendation process and prevent spam or duplicate identities, the system follows these strict rules:
+
+### 1. Administrative Controls
+> [!IMPORTANT]
+> To maintain a high level of trust, Admin and Approver roles are strictly controlled.
+
+* **Restricted Registration:** Admins and Approvers **cannot** register themselves via wallet login. This keeps the list of authorized academic authorities constant and verified.
+* **Authority Management:** Only the **Admin** has the permission to create new Approver accounts.
+* **Wallet Binding:** Only the Admin can update or change the authorized wallet addresses for themselves or Approvers to ensure account recovery and security.
+
+### 2. Student Verification & Sybil Resistance
+* **Domain Restriction:** Students can register using their crypto wallet, but they **must** provide a verified university email address (e.g., `student@exampleuniversity.edu`). Personal emails (Gmail, Yahoo, etc.) are restricted to prevent a single user from creating multiple student profiles.
+* **Multi-Wallet Support:** A single student profile can have multiple wallet addresses associated with it, allowing students flexibility in how they interact with the DApp while maintaining a single verified academic identity.
 
 ---
 
