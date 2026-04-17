@@ -1,7 +1,7 @@
 /*
 This script file has scripts to fetch LORs based on events (New LOR Fetch, Approved LOR, REJETED LOR)
 These scripts are created for the scenario where if LOR is created or updated (APPROVED, REJETED)
-updated at blockchain but not updated in the database due to backend failure. So by running these scripts we can sync data between blockchaoin and database.
+at blockchain but not updated/fetched in the database due to backend failure. So by running these scripts we can sync data between blockchaoin and database.
 These scripts can be run manually or set as cron job.
 */
 
@@ -14,7 +14,7 @@ import { config } from 'dotenv'
 
 config()
 
-
+// Fetch LOR which are created but not fetched (status = PENDING)
 async function lorcronjob() {
     const isConnectDB = await connectDB()
 
@@ -34,11 +34,12 @@ async function lorcronjob() {
 
         const contractLORLogs = await contractEventLogs.queryFilter(contractLORFilter, startBlock, "latest")
         // console.log(contractLORLogs)
+        // If there are new LOR requests in this range
         if (contractLORLogs && contractLORLogs.length > 0) {
             for (let i = 0; i < contractLORLogs.length; i++) {
                 const lorRequest = await contractEventLogs.getLORRequest(contractLORLogs[i].args.requestId)
                 const lorExist = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
-
+                // If LOR does not exist in database then create new LOR request
                 if (!lorExist) {
                     const requestData = {
                         requestId: lorRequest.requestId.toString(),
@@ -71,7 +72,7 @@ async function lorcronjob() {
 }
 
 
-
+// LOR approved but not fetched in databse (status = APPROVED)
 async function lorapprovedcronjob() {
     const isConnectDB = await connectDB()
 
@@ -91,11 +92,12 @@ async function lorapprovedcronjob() {
 
         const contractLORLogs = await contractEventLogs.queryFilter(contractLORFilter, startBlock, "latest")
         // console.log(contractLORLogs)
+        // If there are new LOR approved requests in this range
         if (contractLORLogs && contractLORLogs.length > 0) {
             for (let i = 0; i < contractLORLogs.length; i++) {
                 const lorRequest = await contractEventLogs.getLORRequest(contractLORLogs[i].args.requestId)
                 const lorExist = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
-
+                //LOR in database showing status as PENDING but on chain it is approved
                 if (lorExist && lorExist.status !== lorRequest.isApproved) {
 
                     // console.log(`lorid: ${lorRequest.requestId.toString()} status: ${lorRequest.isApproved && "APPROVED"}`)
@@ -124,7 +126,7 @@ async function lorapprovedcronjob() {
 
 }
 
-
+// LOR rejected but not fetched in databse (status = REJECTED)
 async function lorrejectedcronjob() {
     const isConnectDB = await connectDB()
 
@@ -145,11 +147,12 @@ async function lorrejectedcronjob() {
 
         const contractLORLogs = await contractEventLogs.queryFilter(contractLORFilter, startBlock, "latest")
         // console.log(contractLORLogs)
+        // If there are new LOR rejected requests in this range
         if (contractLORLogs && contractLORLogs.length > 0) {
             for (let i = 0; i < contractLORLogs.length; i++) {
                 const lorRequest = await contractEventLogs.getLORRequest(contractLORLogs[i].args.requestId)
                 const lorExist = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
-
+                // LOR in database showing status as PENDING but on chain it is rejected
                 if (lorExist && lorExist.status !== lorRequest.isRejected) {
 
                     // console.log(`lorid: ${lorRequest.requestId.toString()} status: ${lorRequest.isApproved && "APPROVED"}`)

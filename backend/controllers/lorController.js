@@ -23,7 +23,6 @@ export async function GetLORbyUserController(req, res) {
 export async function GenerateLORLetter(req, res) {
     try {
 
-
         const templateData = req.body
         // console.log(templateData)
 
@@ -38,10 +37,11 @@ export async function GenerateLORLetter(req, res) {
         const pdfdoc = await page.pdf({ format: 'A4', printBackground: true, })
         await browser.close();
 
-        res.status(200).set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `inline; filename='${templateData.studentName}-${templateData.courseName}-LOR.pdf'`
-        }).send(pdfdoc);
+
+        // res.status(200).set({
+        //     "Content-Type": "application/pdf",
+        //     "Content-Disposition": `inline; filename='${templateData.studentName}-${templateData.courseName}-LOR.pdf'`
+        // }).send(pdfdoc);
 
     } catch (error) {
         console.error(error)
