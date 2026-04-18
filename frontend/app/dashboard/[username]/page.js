@@ -142,6 +142,7 @@ function Dashboard() {
 
     async function fetchLOR() {
       if (user) {
+        console.log(user)
         setLoading(true)
         const res = await getLor()
         // console.log(res.data.lorRequests)
@@ -203,15 +204,16 @@ function Dashboard() {
       <div className='w-full min-h-screen flex flex-col'>
 
         <div className='w-full flex flex-col gap-3 mt-3 lg:flex-row '>
-          {user.role === 'Admin' || user.role === 'Approver' && <div className='max-w-max flex flex-col gap-3 lg:flex-row'>
+          {(user.role === "Admin" || user.role === "Approver") && (<div className='max-w-max flex flex-col gap-3 lg:flex-row'>
             <div className='text-black bg-gray-200 p-2 rounded-lg max-w-max text-sm lg:text-base'>
               <p>{user.walletaddress}</p>
             </div>
             {!isConnected ? <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={approverConnect}>Connect Wallet</button> :
               <button className='max-w-max text-white px-2.5 py-2 rounded-lg cursor-pointer bg-blue-600' onClick={disconnect}>Disconnect</button>
             }
-          </div>
+          </div>)
           }
+
 
           {/* </> */}
 
