@@ -8,11 +8,14 @@ These scripts can be run manually or set as cron job.
 
 import { connectDB } from "./dbConnection.js";
 import LORRequest from "../models/LOR.js";
-import { contractEventLogs } from "../utils/ethersprovider.js";
+import { getContractEventLogs } from "../utils/ethersprovider.js";
 import { getYesterdayRange } from "../utils/LORDateFunc.js";
 import { config } from 'dotenv'
+import { get } from "mongoose";
 
 config()
+
+const contractEventLogs = getContractEventLogs()
 
 // Fetch LOR which are created but not fetched (status = PENDING)
 async function lorcronjob() {

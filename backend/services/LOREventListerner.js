@@ -1,6 +1,8 @@
-import contract from "../utils/ethersprovider.js"
 import Student from "../models/Users/Student.js";
 import LORRequest from "../models/LOR.js";
+import { getWsContract } from "../utils/ethersprovider.js";
+
+const contract = getWsContract()
 
 export function LOREventListerner() {
 

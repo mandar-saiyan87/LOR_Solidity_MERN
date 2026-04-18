@@ -65,7 +65,7 @@ To ensure the integrity of the recommendation process and prevent spam or duplic
 > [!IMPORTANT]
 > To maintain a high level of trust, Admin and Approver roles are strictly controlled.
 
-* **Restricted Registration:** Admins and Approvers **cannot** register themselves via wallet login. This keeps the list of authorized academic authorities constant and verified.
+* **Restricted Registration:** Admins and Approvers **cannot** register & login themselves via wallet login. This keeps the list of authorized academic authorities constant and verified. Once logged in they need to connect to wallet.
 * **Authority Management:** Only the **Admin** has the permission to create new Approver accounts.
 * **Wallet Binding:** Only the Admin can update or change the authorized wallet addresses for themselves or Approvers to ensure account recovery and security.
 

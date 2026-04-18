@@ -15,6 +15,6 @@ export default async function connectDB() {
             LOREventListerner()
         }
     } catch (error) {
-        console.log(error)
+        console.log(error.message)
     }
 }
