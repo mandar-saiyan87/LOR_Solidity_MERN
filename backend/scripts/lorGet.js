@@ -5,13 +5,13 @@ at blockchain but not updated/fetched in the database due to backend failure. So
 These scripts can be run manually or set as cron job.
 */
 
-
 import { connectDB } from "./dbConnection.js";
 import LORRequest from "../models/LOR.js";
 import { getContractEventLogs } from "../utils/ethersprovider.js";
 import { getYesterdayRange } from "../utils/LORDateFunc.js";
 import { config } from 'dotenv'
 import { get } from "mongoose";
+import Student from "../models/Users/Student.js";
 
 config()
 
@@ -41,9 +41,13 @@ async function lorcronjob() {
         if (contractLORLogs && contractLORLogs.length > 0) {
             for (let i = 0; i < contractLORLogs.length; i++) {
                 const lorRequest = await contractEventLogs.getLORRequest(contractLORLogs[i].args.requestId)
+
                 const lorExist = await LORRequest.findOne({ requestId: lorRequest.requestId.toString() })
                 // If LOR does not exist in database then create new LOR request
                 if (!lorExist) {
+
+                    const studentDetails = await Student.findOne({ walletaddress: lorRequest.studentAddress })
+
                     const requestData = {
                         requestId: lorRequest.requestId.toString(),
                         studentId: studentDetails._id,
@@ -65,11 +69,14 @@ async function lorcronjob() {
 
             }
             console.log(`✅ LOR-GET fetching job completed successfully — ${contractLORLogs.length} logs processed.`)
+            return
         } else {
             console.log("ℹ️ No new LOR requests found in this range.")
+            return
         }
     } catch (error) {
         console.log(error)
+        return
     }
 
 }
@@ -183,6 +190,6 @@ async function lorrejectedcronjob() {
 
 }
 
-// lorcronjob()
+lorcronjob()
 // lorapprovedcronjob()
 // lorrejectedcronjob()

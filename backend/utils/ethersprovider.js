@@ -1,8 +1,13 @@
 import { ethers } from "ethers";
 import contractabi from "../contracts/LORABI.json" with { type: 'json'}
 import dotenv from "dotenv"
+import path from "path"
+import { fileURLToPath } from "url";
 
-dotenv.config()
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.join(__dirname, "../.env") });
+
 
 // Listen to events realtime (WebSocket provider)
 function getWsContract() {
