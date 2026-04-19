@@ -74,7 +74,7 @@ To ensure the integrity of the recommendation process and prevent spam or duplic
 
 ### 2. Student Verification & Sybil Resistance
 * **Domain Restriction:** Students can register using their crypto wallet, but they **must** provide a verified university email address (e.g., `student@exampleuniversity.edu`). Personal emails (Gmail, Yahoo, etc.) are restricted to prevent a single user from creating multiple student profiles.
-* **Multi-Wallet Support:** A single student profile can have multiple wallet addresses associated with it, allowing students flexibility in how they interact with the DApp while maintaining a single verified academic identity.
+* **Multi-Address Support:** A single student profile can have multiple wallet addresses associated with it, allowing students flexibility in how they interact with the DApp while maintaining a single verified academic identity.(Currently only supports Metamask Addresses, will add support for other wallets.)
 
 ---
 
