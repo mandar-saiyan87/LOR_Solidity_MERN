@@ -142,7 +142,6 @@ function Dashboard() {
 
     async function fetchLOR() {
       if (user) {
-        console.log(user)
         setLoading(true)
         const res = await getLor()
         // console.log(res.data.lorRequests)
