@@ -85,6 +85,8 @@ function Dashboard() {
     const options = { year: 'numeric', month: 'short', day: '2-digit' }
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObject)
 
+    const txhash_link = `https://sepolia.etherscan.io//tx/${currentLor.txHash}`
+
 
     const lordata = {
       studentName: currentLor.fullname,
@@ -95,7 +97,8 @@ function Dashboard() {
       universityName: currentLor.university,
       approvalDate: formattedDate,
       studentWalletAddress: currentLor.studentAddress,
-      approverWalletAddress: currentLor.approverAddress
+      approverWalletAddress: currentLor.approverAddress,
+      txHash_link: txhash_link
     }
 
     const lorpdf = await generateLOR(lordata)
