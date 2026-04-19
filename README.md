@@ -47,10 +47,13 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
   - Approve request (by Admin/Approver)  
   - Reject request (by Admin/Approver)
 - Event Listeners: Syncing the MongoDB database with blockchain events (e.g., `LORApproved / LORREject etc`).
-- Request/Create LOR letter and download
+- Generate LOR letter PDF and download
 
 ### 🚧 In Progress
 - Frontend UI in React/Next.js
+- Set user password for users registered via wallet (Currently user registering via wallet doesn't have password)
+- Change password for existing user
+- Scripts to fetch events (LOR creation / Approved / Rejected) missed and didn't added to database (could be connection failures)
 - Integration with IPFS (Pinata):
   - Upload / save Generated LOR document to Pinata storage 
   - Storing IPFS hash  
