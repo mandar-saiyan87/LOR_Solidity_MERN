@@ -85,7 +85,7 @@ function Dashboard() {
     const options = { year: 'numeric', month: 'short', day: '2-digit' }
     const formattedDate = new Intl.DateTimeFormat('en-US', options).format(dateObject)
 
-    const txhash_link = `https://sepolia.etherscan.io/tx/${currentLor.txHash}`
+    const txhash_link = `https://sepolia.etherscan.io/tx/${currentLor.updatedtxHash}`
 
 
     const lordata = {
