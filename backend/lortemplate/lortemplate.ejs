@@ -92,7 +92,10 @@
                     templateData.studentWalletAddress %><br>
                     Approver Wallet: <%= templateData.approverWalletAddress %>
             </p>
-            <p>TXHash: <%= templateData.txHash_link %>
+            <p class="text-sm wrap-normal">TXHash: <span><a
+                        href="<%= templateData.txHash_link %>">
+                        <%= templateData.txHash_link %>
+                    </a></span>
             </p>
             <p>(This LOR is recorded and verifiable on the blockchain.)</p>
         </div>
