@@ -21,22 +21,29 @@ export async function GetLORbyUserController(req, res) {
 }
 
 export async function GenerateLORLetter(req, res) {
+
+    const browserless = `wss://production-sfo.browserless.io/?token=${process.env.BROWSERLESS_API_KEY}`
+
     try {
 
         const templateData = req.body
         // console.log(templateData)
 
         const htmltemplate = path.join(process.cwd(), "lortemplate", "lortemplate.ejs")
-        console.log("Looking for template at:", htmltemplate); // Check if this matches your actual folder structure
+        // Check if this matches your actual folder structure
         const html = await ejs.renderFile(htmltemplate, { templateData })
         // console.log(html)
 
-        const browser = await puppeteer.launch(
-            {
-                headless: true,
-                args: ['--no-sandbox', '--disable-setuid-sandbox']
-            }
-        )
+        // const browser = await puppeteer.launch(
+        //     {
+        //         headless: true,
+        //         args: ['--no-sandbox', '--disable-setuid-sandbox']
+        //     }
+        // )
+
+        const browser = await puppeteer.connect({
+            browserWSEndpoint: browserless
+        })
         const page = await browser.newPage()
         // await page.setContent(html, { waitUntil: 'networkidle0' }) // Wait until the page is fully loaded
         await page.setContent(html) // Wait until the page is fully loaded
