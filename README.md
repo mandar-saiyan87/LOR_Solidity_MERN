@@ -53,7 +53,7 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
 - Frontend UI in React/Next.js
 - Set user password for users registered via wallet (Currently user registering via wallet doesn't have password)
 - Change password for existing user
-- Scripts to fetch events (LOR creation / Approved / Rejected) missed and didn't added to database (could be connection failures)
+- Scripts to fetch events (LOR creation / Approved / Rejected) missed and didn't added to database (could be due to DB connection failures)
 - Integration with IPFS (Pinata):
   - Upload / save Generated LOR document to Pinata storage 
   - Storing IPFS hash  
