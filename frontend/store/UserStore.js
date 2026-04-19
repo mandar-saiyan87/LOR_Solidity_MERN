@@ -131,7 +131,14 @@ const userStore = create((set) => ({
                 return response.data
             }
         } catch (error) {
-            set({ error: error.response?.data?.message || "LOR Fetching Failed" })
+            if (error.response && error.response.data instanceof Blob) {
+                const text = await error.response.data.text()
+                const errorData = JSON.parse(text)
+                console.log(errorData.message)
+                set({ error: errorData.message || "LOR Fetching Failed" });
+            } else {
+                set({ error: "Server Connection Failed" });
+            }
             // console.log(error.response?.data?.message)
             return error.response
         }
