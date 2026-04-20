@@ -34,8 +34,8 @@ function UsersAuth() {
                 return
             }
             // console.log(address)
-            const result = await walletLogin(address)
             userStore.setState({ loading: true })
+            const result = await walletLogin(address)
             // console.log(result)
             if (result?.status !== 200) {
                 userStore.setState({ loading: false })
