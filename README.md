@@ -1,92 +1,180 @@
-# 🧾 LOR - Letter of Recommendation (Web3 DApp)
+# 🧾 TrustDoc — Decentralized Document Approval System
+Demonstrated through a University Letter of Recommendation workflow
 
-A decentralized application for managing **Letter of Recommendation (LOR)** requests using blockchain, offering transparency, authenticity, and immutability. Students can request LORs, and authorized approvers (like professors) can approve or reject them. The metadata is stored on-chain, and the signed LOR PDF is stored on IPFS.
-
----
-
-## 🚀 Tech Stack
-
-### 🔐 Smart Contract & Blockchain
-- **Solidity** – Smart contract for LOR request & approval
-- **Hardhat** – Development, testing, and deployment environment
-- **Ethers.js** – Interacting with smart contracts
-- **Sepolia Testnet** – Deployed contract: `0x039BAA8aD060f61F792f7F13d323bBaFbE267Bce`
-
-### 🌐 Frontend *(Work in Progress)*
-- **React.js** / **Next.js** – Frontend with Web3 integration
-
-### 🧠 Backend *(Work in Progress)*
-- **Node.js / Express** – REST API for managing users and requests
-- **MongoDB** – Database for user, approver, and request metadata
-
-### 🗃️ File Storage
-- **IPFS (InterPlanetary File System)** – Decentralized storage for signed LOR PDFs
+TrustDoc is a proof-of-concept decentralized document approval system built on Ethereum, demonstrating how blockchain technology can bring transparency, authenticity, and immutability to any workflow involving sensitive or legally significant documents.
+The system is demonstrated through a University Letter of Recommendation workflow — where students request documents and authorized approvers accept or reject them — but the underlying architecture is designed to be replicable across any domain requiring trusted, verifiable document issuance.
+Potential real-world applications include employment verification letters, legal affidavits, medical clearance certificates, government-issued approvals, financial compliance documents, and academic credential issuance — any scenario where document authenticity and tamper-proof audit trails matter.
 
 ---
 
-## ✅ Features
+## 🔍 Why Blockchain for Document Approval?
 
-- Student can request an LOR via the DApp
-- Approver (e.g., professor) can approve or reject requests
-- Each LOR request is stored immutably on-chain
-- Signed PDFs are uploaded to IPFS
-- Role-based access for approvers and students
-- Designed with verifiability and transparency
+Traditional document approval workflows face three core problems:
+- **Authenticity** — Documents can be forged or tampered with after issuance
+- **Traceability** — No reliable audit trail of who approved what and when
+- **Dependency** — Verification requires contacting the issuing authority directly
+
+Blockchain solves all three:
+- Every request, approval, and rejection is recorded immutably on-chain
+- The approval history is publicly verifiable without contacting anyone
+- IPFS storage ensures the document itself cannot be silently altered after issuance
+- Smart contract logic enforces role-based access — no central authority can override the rules
+
+---
+
+## 🔁 Replicable Architecture
+
+This project is structured so the core approval workflow can be 
+adapted to other document-sensitive domains with minimal changes:
+
+| Domain | Requester | Approver | Document |
+|---|---|---|---|
+| Academia | Student | Professor / University | Letter of Recommendation |
+| Employment | Employee | HR / Manager | Experience / Relieving Letter |
+| Legal | Applicant | Lawyer / Court | Affidavit / NOC |
+| Healthcare | Patient | Doctor / Hospital | Medical Certificate |
+| Government | Citizen | Authorised Officer | Permit / Clearance |
+| Finance | Client | Compliance Officer | KYC / Audit Report |
+
+The smart contract, event listener, and PDF generation pipeline 
+remain largely the same across all these scenarios. 
+Only the roles, form fields, and document templates change.
+
+---
+
+## 🚀 Tech Stack & Architecture Overview
+
+The system runs across three layers:
+
+**🔗 Blockchain Layer (Source of Truth)**
+Smart contract on Sepolia handles all state changes — requests, 
+approvals, rejections. This is the authoritative record.
+- Solidity, Hardhat, Ethers.js
+- Deployed on Sepolia: `0x039BAA8aD060f61F792f7F13d323bBaFbE267Bce`
+
+**🧠 Backend Layer (Operational)**
+Handles user sessions, email verification, PDF generation, 
+and IPFS uploads. MongoDB mirrors blockchain state for fast 
+querying, synced via event listeners with a cron-based 
+recovery script for missed events.
+- Node.js / Express, MongoDB
+
+**🌐 Frontend Layer (Interface)** *(Active Development)*
+React/Next.js DApp with MetaMask wallet integration. 
+Communicates with the smart contract via Ethers.js and 
+the backend API for off-chain operations.
+- React.js / Next.js
+
+---
+
+## ✅ Core Features
+
+- **On-Chain Request Lifecycle** — Every document request, approval, 
+  and rejection is recorded as an immutable blockchain transaction
+- **Role-Based Access Control** — Smart contract enforces strict 
+  separation between requesters and approvers at the protocol level
+- **Tamper-Proof Document Storage** — Approved documents are stored 
+  on IPFS; the hash stored on-chain makes silent alteration detectable
+- **Sybil Resistance** — Institutional email verification prevents 
+  duplicate identities and spam requests
+- **Verifiable Without Trust** — Any third party can verify an 
+  approved document directly on-chain without contacting the issuing authority
+- **PDF Generation & Download** — Approved documents are generated 
+  server-side and made available for download, with IPFS archival (in progress)
+- **Event-Driven DB Sync** — MongoDB stays in sync with blockchain 
+  events via listeners, with a recovery script for missed events
 
 ---
 
 ## 📦 Current Status
 
 ### ✅ Completed
-- Smart contract development
-- Unit testing using Hardhat
-- Deployment on Sepolia
-- Repository initialized on GitHub
+- Smart contract development, testing, Deployment on Sepolia
 - LOR Request Management:
-  - Create request  
-  - Approve request (by Admin/Approver)  
-  - Reject request (by Admin/Approver)
-- Event Listeners: Syncing the MongoDB database with blockchain events (e.g., `LORApproved / LORREject etc`).
-- Generate LOR letter PDF and download
+  - Create, Approve, Reject requests on-chain
+- Event Listeners: Real-time MongoDB sync with blockchain events (`LORRequested`, `LORApproved`, `LORREjected`).
+- PDF generation and download for approved LORs
 
 ### 🚧 In Progress
 - Frontend UI in React/Next.js
-- Set user password for users registered via wallet (Currently user registering via wallet doesn't have password)
-- Change password for existing user
+- Password setup for wallet-registered users
+- Password change flow for existing users
 
 
-## Upcoming Updates
-- Scripts to fetch events (LOR creation / Approved / Rejected) missed and didn't added to database (could be due to DB connection failures)
-- Integration with IPFS (Pinata):
-  - Upload / save Generated LOR document to Pinata storage 
-  - Storing IPFS hash  
-  - Allowing users to download LOR anytime  
-- Refining transaction states and UI feedback during minting/approval.
-- Adding delete flag in LOR so those requests can be deleted from database and won't get refetched.
+### ⚡Upcoming Updates
+- Cron-based recovery script for missed blockchain events (DB connection failures, downtime gaps)
+- IPFS Integration via Pinata:
+  - Upload approved LOR documents to decentralized storage 
+  - Store and retrieve IPFS hash on-chain  
+  - Permanent download link for approved LORs  
+- Soft delete flag for LOR requests to prevent ghost re-fetching.
+- PDF hash stored alongside transaction hash for tamper-proof verification.
+- Improved transaction state handling and UI feedback.
 
+---
 
+## ⚙️ System Design & Security
 
-## ⚙️ System Design & Limitations
+The system is designed around two core principles — **trust minimization** 
+and **identity integrity**. Every access control decision is intentional, 
+addressing real-world concerns around document authenticity and abuse prevention.
 
-To ensure the integrity of the recommendation process and prevent spam or duplicate identities, the system follows these strict rules:
+### 1. Authority & Role Management
 
-### 1. Administrative Controls
 > [!IMPORTANT]
-> To maintain a high level of trust, Admin and Approver roles are strictly controlled.
+> Admin and Approver roles are strictly controlled to maintain 
+> a high level of institutional trust.
 
-* **Restricted Registration:** Admins and Approvers **cannot** register & login themselves via wallet login. This keeps the list of authorized academic authorities constant and verified. Once logged in they need to connect to wallet.
-* **Authority Management:** Only the **Admin** has the permission to create new Approver accounts.
-* **Wallet Binding:** Only the Admin can update or change the authorized wallet addresses for themselves or Approvers to ensure account recovery and security.
+- **Controlled Admin/Approver Registration** — Admins and Approvers 
+  are never self-registered. Accounts are pre-created and managed 
+  exclusively by the Admin, keeping the list of authorized authorities 
+  verified and constant. Wallet connection happens post-login, 
+  separating identity verification from authentication.
 
-### 2. Student Verification & Sybil Resistance
-* **Domain Restriction:** Students can register using their crypto wallet, but they **must** provide a verified university email address (e.g., `student@exampleuniversity.edu`). Personal emails (Gmail, Yahoo, etc.) are restricted to prevent a single user from creating multiple student profiles.
-* **Multi-Address Support:** A single student profile can have multiple wallet addresses associated with it, allowing students flexibility in how they interact with the DApp while maintaining a single verified academic identity.(Currently only supports Metamask Addresses, will add support for other wallets.)
+- **Strict Authority Hierarchy** — Only the Admin can create new 
+  Approver accounts, ensuring no lateral privilege escalation 
+  is possible within the system.
+
+- **Wallet Binding by Admin Only** — Wallet addresses for Admin and 
+  Approver accounts can only be updated by the Admin. This prevents 
+  unauthorized account takeovers while allowing legitimate key recovery.
+
+### 2. Student Identity & Sybil Resistance
+
+- **Institutional Email Restriction** — Students must register with 
+  a verified university email address. Personal email providers 
+  (Gmail, Yahoo, etc.) are blocked, ensuring each real-world identity 
+  maps to exactly one student profile — preventing spam requests 
+  and duplicate identities.
+
+- **Multi-Wallet Support per Identity** — A single verified student 
+  profile can have multiple wallet addresses associated with it. 
+  This gives students flexibility across devices and wallets without 
+  compromising identity uniqueness.
+  *(Currently MetaMask only — multi-wallet provider support planned.)*
+
+---
+
+## 📌 Scope & Known Limitations
+
+This is a proof-of-concept built to demonstrate the architectural 
+pattern of blockchain-based document approval — not a production deployment. 
+The focus is on validating the concept and demonstrating a full-stack 
+Web3 development workflow end-to-end.
+
+| Limitation | Status |
+|---|---|
+| Frontend UI | In progress |
+| Multi-wallet provider support | Planned (currently MetaMask only) |
+| IPFS integration via Pinata | Pending |
+| Smart contract gas optimization | Not yet applied |
+| Email verification | Domain-restricted but not cryptographically signed |
 
 ---
 
 ## 🌍 Live Project
 
-🚧 The project is still **in progress**, but you can check out the live version here:  
-👉 [LOR DApp - Live Demo](https://lor-solidity-frontend.vercel.app/)
+🚧 🚧 Actively in development. The current live version demonstrates the core approval workflow end-to-end. IPFS integration and full frontend are in progress.  
+👉 [Live Demo — TrustDoc on Sepolia](https://lor-solidity-frontend.vercel.app/)
 
 ---
