@@ -64,6 +64,8 @@ A decentralized application for managing **Letter of Recommendation (LOR)** requ
 - Refining transaction states and UI feedback during minting/approval.
 - Adding delete flag in LOR so those requests can be deleted from database and won't get refetched.
 
+
+
 ## ⚙️ System Design & Limitations
 
 To ensure the integrity of the recommendation process and prevent spam or duplicate identities, the system follows these strict rules:
