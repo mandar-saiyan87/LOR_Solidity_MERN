@@ -5,7 +5,9 @@ TrustDoc is a proof-of-concept decentralized document approval system built on E
 The system is demonstrated through a University Letter of Recommendation workflow — where students request documents and authorized approvers accept or reject them — but the underlying architecture is designed to be replicable across any domain requiring trusted, verifiable document issuance.
 Potential real-world applications include employment verification letters, legal affidavits, medical clearance certificates, government-issued approvals, financial compliance documents, and academic credential issuance — any scenario where document authenticity and tamper-proof audit trails matter.
 
+
 ---
+
 
 ## 🔍 Why Blockchain for Document Approval?
 
@@ -20,7 +22,9 @@ Blockchain solves all three:
 - IPFS storage ensures the document itself cannot be silently altered after issuance
 - Smart contract logic enforces role-based access — no central authority can override the rules
 
+
 ---
+
 
 ## 🔁 Replicable Architecture
 
@@ -40,7 +44,9 @@ The smart contract, event listener, and PDF generation pipeline
 remain largely the same across all these scenarios. 
 Only the roles, form fields, and document templates change.
 
+
 ---
+
 
 ## 🚀 Tech Stack & Architecture Overview
 
@@ -65,7 +71,9 @@ Communicates with the smart contract via Ethers.js and
 the backend API for off-chain operations.
 - React.js / Next.js
 
+
 ---
+
 
 ## ✅ Core Features
 
@@ -84,7 +92,9 @@ the backend API for off-chain operations.
 - **Event-Driven DB Sync** — MongoDB stays in sync with blockchain 
   events via listeners, with a recovery script for missed events
 
+
 ---
+
 
 ## 📦 Current Status
 
@@ -111,7 +121,9 @@ the backend API for off-chain operations.
 - PDF hash stored alongside transaction hash for tamper-proof verification.
 - Improved transaction state handling and UI feedback.
 
+
 ---
+
 
 ## ⚙️ System Design & Security
 
@@ -153,7 +165,9 @@ addressing real-world concerns around document authenticity and abuse prevention
   compromising identity uniqueness.
   *(Currently MetaMask only — multi-wallet provider support planned.)*
 
+
 ---
+
 
 ## 📌 Scope & Known Limitations
 
@@ -170,7 +184,9 @@ Web3 development workflow end-to-end.
 | Smart contract gas optimization | Not yet applied |
 | Email verification | Domain-restricted but not cryptographically signed |
 
+
 ---
+
 
 ## 🌍 Live Project
 
