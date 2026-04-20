@@ -25,7 +25,7 @@ function UsersAuth() {
     const [email, setEmail] = useState('')
 
 
-
+    // Login using Metamask wallet
     useEffect(() => {
         async function usewalletlogin() {
             if (!isConnected || !address) {
@@ -60,15 +60,15 @@ function UsersAuth() {
 
     }, [user, loading, router])
 
-
+    // Handles first time user to register themselves using metamask address and login
     function handlewalletLogin() {
 
         if (!validateEmail(email)) {
             toast.error('Enter valid email id, Only university email id allowed!');
             return
         }
-        const result = walletLogin(address, email)
         userStore.setState({ loading: true })
+        const result = walletLogin(address, email)
         if (result.status !== 200) {
             userStore.setState({ loading: false })
             // disconnect()

@@ -184,6 +184,12 @@ Web3 development workflow end-to-end.
 | Smart contract gas optimization | Not yet applied |
 | Email verification | Domain-restricted but not cryptographically signed |
 
+> [!TIP]
+> The backend is hosted on a free tier that spins down after inactivity. 
+> If the initial login is slow or appears to fail, wait 20–30 seconds 
+> and try again — the server is waking up. Subsequent requests will 
+> be fast.
+
 
 ---
 
