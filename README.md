@@ -104,6 +104,7 @@ the backend API for off-chain operations.
   - Create, Approve, Reject requests on-chain
 - Event Listeners: Real-time MongoDB sync with blockchain events (`LORRequested`, `LORApproved`, `LORREjected`).
 - PDF generation and download for approved LORs
+- Cron-based recovery script for missed blockchain events (DB connection failures, downtime gaps)
 
 ### 🚧 In Progress
 - Frontend UI in React/Next.js
@@ -112,7 +113,7 @@ the backend API for off-chain operations.
 
 
 ### ⚡Upcoming Updates
-- Cron-based recovery script for missed blockchain events (DB connection failures, downtime gaps)
+
 - IPFS Integration via Pinata:
   - Upload approved LOR documents to decentralized storage 
   - Store and retrieve IPFS hash on-chain  
@@ -176,6 +177,7 @@ pattern of blockchain-based document approval — not a production deployment.
 The focus is on validating the concept and demonstrating a full-stack 
 Web3 development workflow end-to-end.
 
+
 | Limitation | Status |
 |---|---|
 | Frontend UI | In progress |
@@ -183,6 +185,9 @@ Web3 development workflow end-to-end.
 | IPFS integration via Pinata | Pending |
 | Smart contract gas optimization | Not yet applied |
 | Email verification | Domain-restricted but not cryptographically signed |
+| Cron-based recovery scripts are not deployed as cron jobs to run automatically as free hosting doesn't provide cron job deployment | can be improved - suggestions are welcome |
+
+
 
 > [!TIP]
 > The backend is hosted on a free tier that spins down after inactivity. 
