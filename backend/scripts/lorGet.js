@@ -8,7 +8,6 @@ These scripts can be run manually or set as cron job.
 import { connectDB } from "./dbConnection.js";
 import LORRequest from "../models/LOR.js";
 import { getContractEventLogs } from "../utils/ethersprovider.js";
-import { getYesterdayRange } from "../utils/LORDateFunc.js";
 import { config } from 'dotenv'
 import { get } from "mongoose";
 import Student from "../models/Users/Student.js";
@@ -26,11 +25,11 @@ async function lorcronjob() {
         return
     }
 
-    // get latest blocknumber from yesterday i.e. last block
+    // get latest blocknumber from database (Last added block for pending LOR requests)
     try {
-        const { yesterdaystart, yesterdayEnd } = getYesterdayRange()
-        const yesterdayLatestLORBlock = await LORRequest.find({ requestedAt: { $gte: yesterdaystart, $lte: yesterdayEnd } }).sort({ blockNumber: -1 })
-        const startBlock = yesterdayLatestLORBlock && yesterdayLatestLORBlock.length > 0 ? yesterdayLatestLORBlock[0].blockNumber : Number(process.env.STARTING_BLOCK_NUMBER)
+
+        const latestblock = await LORRequest.findOne({ status: "PENDING" }).sort({ blockNumber: -1 })
+        const startBlock = latestblock && latestblock.blockNumber ? latestblock.blockNumber + 1 : Number(process.env.STARTING_BLOCK_NUMBER)
 
         // Filter instance
         const contractLORFilter = contractEventLogs.filters.LORRequested()
@@ -91,11 +90,11 @@ async function lorapprovedcronjob() {
         return
     }
 
-    // get latest blocknumber from yesterday i.e. last block
+    // get latest blocknumber from database (Last added block for approved LOR requests)
     try {
-        const { yesterdaystart, yesterdayEnd } = getYesterdayRange()
-        const yesterdayLatestLORBlock = await LORRequest.find({ requestedAt: { $gte: yesterdaystart, $lte: yesterdayEnd } }).sort({ blockNumber: -1 })
-        const startBlock = yesterdayLatestLORBlock && yesterdayLatestLORBlock.length > 0 ? yesterdayLatestLORBlock[0].blockNumber : Number(process.env.STARTING_BLOCK_NUMBER)
+
+        const latestblock = await LORRequest.findOne({ status: "APPROVED" }).sort({ updatedblockNumber: -1 })
+        const startBlock = latestblock && latestblock.updatedblockNumber ? latestblock.updatedblockNumber + 1 : Number(process.env.STARTING_BLOCK_NUMBER)
 
         // Filter instance
         const contractLORFilter = contractEventLogs.filters.LORApproved()
@@ -146,11 +145,11 @@ async function lorrejectedcronjob() {
     }
 
 
-    // get latest blocknumber from yesterday i.e. last block
+    // get latest blocknumber from database (Last added block for rejected LOR requests)
     try {
-        const { yesterdaystart, yesterdayEnd } = getYesterdayRange()
-        const yesterdayLatestLORBlock = await LORRequest.find({ requestedAt: { $gte: yesterdaystart, $lte: yesterdayEnd } }).sort({ blockNumber: -1 })
-        const startBlock = yesterdayLatestLORBlock && yesterdayLatestLORBlock.length > 0 ? yesterdayLatestLORBlock[0].blockNumber : Number(process.env.STARTING_BLOCK_NUMBER)
+
+        const latestblock = await LORRequest.findOne({ status: "REJECTED" }).sort({ updatedblockNumber: -1 })
+        const startBlock = latestblock && latestblock.updatedblockNumber ? latestblock.updatedblockNumber + 1 : Number(process.env.STARTING_BLOCK_NUMBER)
 
         // Filter instance
         const contractLORFilter = contractEventLogs.filters.LORRejected()
@@ -190,6 +189,6 @@ async function lorrejectedcronjob() {
 
 }
 
-lorcronjob()
+// lorcronjob()
 // lorapprovedcronjob()
 // lorrejectedcronjob()

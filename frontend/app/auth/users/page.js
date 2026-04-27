@@ -35,16 +35,21 @@ function UsersAuth() {
             }
             // console.log(address)
             userStore.setState({ loading: true })
-            const result = await walletLogin(address)
-            // console.log(result)
-            if (result?.status !== 200) {
-                userStore.setState({ loading: false })
-                setIsEmail(true)
-                return
+            try {
+                const result = await walletLogin(address)
+                // console.log(result)
+                if (result?.status !== 200) {
+                    userStore.setState({ loading: false })
+                    setIsEmail(true)
+                    return
+                }
+                setIsEmail(false)
+                setEmail('')
+            } catch (error) {
+                console.error("Login error:", error);
+                userStore.setState({ loading: false });
             }
-            userStore.setState({ loading: false })
-            setIsEmail(false)
-            setEmail('')
+
         }
 
 
