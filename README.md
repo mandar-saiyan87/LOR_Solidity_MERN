@@ -185,7 +185,7 @@ Web3 development workflow end-to-end.
 | IPFS integration via Pinata | Pending |
 | Smart contract gas optimization | Not yet applied |
 | Email verification | Domain-restricted but not cryptographically signed |
-| Cron-based recovery scripts are not deployed as cron jobs to run automatically as free hosting doesn't provide cron job deployment | can be improved - suggestions are welcome |
+| Cron-based recovery scripts are not deployed as cron jobs to run automatically free hosting doesn't provide cron job deployments | can be improved - suggestions are welcome |
 
 
 
